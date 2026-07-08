@@ -206,6 +206,13 @@ export default function HomePage({ searchParams }: HomePageProps) {
               width: max-content;
               animation: marquee-scroll 35s linear infinite;
             }
+            .no-scrollbar::-webkit-scrollbar {
+              display: none;
+            }
+            .no-scrollbar {
+              -ms-overflow-style: none;
+              scrollbar-width: none;
+            }
           `}</style>
           
           {/* Label */}
@@ -255,9 +262,9 @@ export default function HomePage({ searchParams }: HomePageProps) {
         <div className="mt-4 h-px bg-[#d7d7d7]" />
 
         <div className="mt-10 grid gap-14 lg:grid-cols-[320px_1fr]">
-          <aside>
-            <h3 className="mb-6 text-lg font-bold text-[#747474]">Kategori Hoaks</h3>
-            <div className="space-y-0">
+          <aside className="min-w-0">
+            <h3 className="mb-6 text-lg font-bold text-[#747474] hidden lg:block">Kategori Hoaks</h3>
+            <div className="flex gap-3 overflow-x-auto pb-4 no-scrollbar -mx-4 px-4 lg:mx-0 lg:px-0 lg:pb-0 lg:flex-col lg:overflow-visible lg:space-y-0">
               {categories.map((category) => {
                 const isSelected = selectedCategory === category.label
                 const hasResults = category.count > 0
@@ -267,33 +274,42 @@ export default function HomePage({ searchParams }: HomePageProps) {
                     key={category.label}
                     disabled={!hasResults}
                     onClick={() => toggleCategory(category.label, category.count)}
-                    className={`w-full flex items-center justify-between border-b border-[#d9d9d9] py-5 text-[#747474] text-left transition ${
-                      hasResults ? 'hover:text-[#07877c] cursor-pointer' : 'cursor-not-allowed opacity-50'
-                    }`}
-                  >
-                    <span className="flex items-center gap-5">
-                      <span className={`flex h-8 w-8 items-center justify-center rounded-md transition ${
+                    className={`flex-shrink-0 flex items-center gap-3 rounded-full border px-4 py-2 text-xs font-bold transition-all
+                      lg:w-full lg:flex lg:items-center lg:justify-between lg:border-0 lg:border-b lg:border-[#d9d9d9] lg:py-5 lg:rounded-none lg:px-0 lg:bg-transparent lg:shadow-none
+                      ${
                         hasResults
                           ? isSelected
-                            ? 'bg-[#07877c] text-white'
+                            ? 'bg-[#07877c] text-white border-[#07877c] lg:text-[#07877c] lg:bg-transparent lg:border-transparent'
+                            : 'bg-white text-slate-700 border-slate-200 hover:border-[#07877c] hover:text-[#07877c] lg:border-transparent lg:hover:border-transparent'
+                          : 'bg-slate-50 text-slate-400 border-slate-100 cursor-not-allowed opacity-50 lg:border-transparent'
+                      }
+                    `}
+                  >
+                    <span className="flex items-center gap-2 lg:gap-5">
+                      <span className={`flex h-7 w-7 lg:h-8 lg:w-8 items-center justify-center rounded-full lg:rounded-md transition ${
+                        hasResults
+                          ? isSelected
+                            ? 'bg-white text-[#07877c] lg:bg-[#07877c] lg:text-white'
                             : 'bg-[#07877c]/15 text-[#07877c]'
                           : 'bg-slate-100 text-slate-400'
                       }`}>
-                        <category.icon className="h-5 w-5" />
+                        <category.icon className="h-4 w-4 lg:h-5 lg:w-5" />
                       </span>
-                      <span className={`text-base font-semibold ${isSelected ? 'text-[#07877c] font-extrabold' : ''}`}>
+                      <span className={`text-xs lg:text-base font-semibold ${isSelected ? 'font-extrabold text-white lg:text-[#07877c]' : 'text-slate-700'}`}>
                         {category.label}
                       </span>
                     </span>
                     <span className="flex items-center gap-2">
-                      <span className={`text-base font-extrabold ${
+                      <span className={`text-xs lg:text-base font-extrabold ${
                         hasResults 
-                          ? 'text-[#07877c]' 
+                          ? isSelected
+                            ? 'text-white/90 lg:text-[#07877c]'
+                            : 'text-[#07877c]' 
                           : 'text-slate-400'
                       }`}>
                         ({category.count})
                       </span>
-                      <span className={`flex h-5 w-5 items-center justify-center rounded-lg transition-all duration-300 text-white ${
+                      <span className={`hidden lg:flex h-5 w-5 items-center justify-center rounded-lg transition-all duration-300 text-white ${
                         hasResults
                           ? isSelected
                             ? 'bg-[#07877c] rotate-90'

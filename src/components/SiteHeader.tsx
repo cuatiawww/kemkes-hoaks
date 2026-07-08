@@ -1,5 +1,6 @@
 'use client'
 
+import { useState } from 'react'
 import {
   CheckCircle2,
   CircleUserRound,
@@ -11,6 +12,7 @@ import {
   Search,
   Heart,
   Link2,
+  X,
 } from 'lucide-react'
 import Link from 'next/link'
 
@@ -25,6 +27,8 @@ const navItems = [
 ]
 
 export default function SiteHeader() {
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
+
   return (
     <header className="w-full">
       <div className="bg-[#07877c] text-white">
@@ -58,7 +62,7 @@ export default function SiteHeader() {
         </div>
       </div>
 
-      <nav className="bg-[#f8f8f8] border-t-4 border-[#07877c] border-b border-slate-200">
+      <nav className="bg-[#f8f8f8] border-t-4 border-[#07877c] border-b border-slate-200 relative">
         <div className="mx-auto flex w-full max-w-[1160px] items-center px-4 py-3">
           <div className="hidden w-full items-center justify-between lg:flex">
             {navItems.map((item) => (
@@ -74,10 +78,34 @@ export default function SiteHeader() {
               </Link>
             ))}
           </div>
-          <button className="flex items-center gap-2 text-sm font-bold uppercase text-[#07877c] lg:hidden">
-            <Menu className="h-5 w-5" />
-            Menu
-          </button>
+          <div className="flex w-full items-center justify-between lg:hidden">
+            <button
+              onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+              className="flex items-center gap-2 text-sm font-bold uppercase text-[#07877c]"
+            >
+              {isMobileMenuOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
+              <span>Menu</span>
+            </button>
+          </div>
+
+          {/* Mobile menu dropdown */}
+          {isMobileMenuOpen && (
+            <div className="absolute top-full left-0 right-0 bg-[#f8f8f8] border-b border-slate-200 shadow-md lg:hidden z-50 flex flex-col divide-y divide-slate-100">
+              {navItems.map((item) => (
+                <Link
+                  key={item.label}
+                  href={item.href}
+                  onClick={() => setIsMobileMenuOpen(false)}
+                  className="flex items-center gap-3 px-6 py-4 text-xs font-black uppercase text-slate-800 transition hover:bg-slate-100/50 hover:text-[#07877c] tracking-wide"
+                >
+                  <span className="flex h-6 w-6 items-center justify-center rounded-full bg-[#07877c] text-white p-1">
+                    <item.icon className="h-3.5 w-3.5" />
+                  </span>
+                  <span>{item.label}</span>
+                </Link>
+              ))}
+            </div>
+          )}
         </div>
       </nav>
     </header>

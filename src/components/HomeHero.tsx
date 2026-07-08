@@ -68,9 +68,9 @@ export default function HomeHero({
 
   return (
     <section className="mx-auto max-w-[1160px] px-4">
-      <div className="bg-white rounded-2xl overflow-hidden shadow-sm border border-slate-200/60">
+      <div className="bg-white rounded-2xl shadow-sm border border-slate-200/60 relative z-30">
         <div
-          className="relative min-h-[360px] bg-cover bg-center"
+          className="relative min-h-[360px] bg-cover bg-center rounded-2xl overflow-hidden"
           style={{ backgroundImage: `url(${heroImage})` }}
         >
           <div className="absolute inset-0 bg-gradient-to-br from-[#10b9ae]/90 via-[#07958f]/85 to-[#005e66]/95" />

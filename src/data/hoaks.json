@@ -2,7 +2,7 @@
   {
     "id": 11,
     "slug": "hoaks-pfizer-rilis-daftar-efek-samping-vaksin-covid-19",
-    "image": "/Pfizer Rilis Daftar Efek Samping Vaksin Covid-19.png",
+    "image": "/hoaks1.jpeg",
     "category": "Vaksinasi",
     "dateTimestamp": 1782777600000,
     "tags": ["pfizer", "vaksin", "covid-19", "kemenkes"],
@@ -25,7 +25,7 @@
   {
     "id": 12,
     "slug": "hoaks-hantavirus-efek-samping-vaksin-covid-19-pfizer",
-    "image": "/Hantavirus adalah Efek Samping Vaksin Covid-19 Pfizer.png",
+    "image": "/hoaks2.webp",
     "category": "Vaksinasi",
     "dateTimestamp": 1781049600000,
     "tags": ["hantavirus", "pfizer", "vaksin", "covid-19"],
@@ -48,7 +48,7 @@
   {
     "id": 13,
     "slug": "hoaks-vaksin-mmr-sebabkan-autisme-pada-anak",
-    "image": "/Vaksin MMR Sebabkan Autisme pada Anak.png",
+    "image": "/hoaks3.jpeg",
     "category": "Vaksinasi",
     "dateTimestamp": 1780099200000,
     "tags": ["vaksin mmr", "autisme", "anak", "imunisasi"],
@@ -71,7 +71,7 @@
   {
     "id": 14,
     "slug": "hoaks-erick-thohir-sebut-vaksin-covid-19-dipasangi-chip",
-    "image": "/Erick Thohir Sebut Vaksin Covid-19 Dipasangi Chip.png",
+    "image": "/hoaks4.jpg",
     "category": "Vaksinasi",
     "dateTimestamp": 1779235200000,
     "tags": ["erick thohir", "vaksin", "chip", "pelacak"],
@@ -94,7 +94,7 @@
   {
     "id": 15,
     "slug": "hoaks-vaksin-sengaja-membuat-anak-sakit-demi-keuntungan",
-    "image": "/Vaksin Sengaja Membuat Anak Sakit demi Keuntungan.png",
+    "image": "/hoaks5.jpeg",
     "category": "Pengobatan",
     "dateTimestamp": 1778371200000,
     "tags": ["vaksin", "anak sakit", "keuntungan", "farmasi"],
@@ -117,7 +117,7 @@
   {
     "id": 16,
     "slug": "hoaks-virus-marburg-dapat-diaktifkan-melalui-5g",
-    "image": "https://images.unsplash.com/photo-1584036561566-baf8f5f1b144?auto=format&fit=crop&w=1200&q=80",
+    "image": "/hoaks1.jpeg",
     "category": "Obat-obatan",
     "dateTimestamp": 1780272000000,
     "tags": ["virus marburg", "5g", "vaksinasi", "pandemi"],

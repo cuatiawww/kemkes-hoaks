@@ -121,7 +121,9 @@ function HoaxImage({ src, small = false }: { src: string; small?: boolean }) {
   return (
     <div
       className={`relative overflow-hidden bg-cover bg-center ${
-        small ? 'h-24 w-24 sm:h-28 sm:w-28 rounded-2xl flex-shrink-0' : 'h-[320px] sm:h-[435px] rounded-2xl w-full'
+        small 
+          ? 'w-[100px] h-[64px] sm:w-[130px] sm:h-[84px] rounded-xl flex-shrink-0 shadow-sm border border-slate-200/50' 
+          : 'aspect-[16/10] w-full rounded-2xl shadow-sm border border-slate-200/50'
       }`}
       style={{ backgroundImage: `url("${encodeURI(src)}")` }}
       role="img"
@@ -133,7 +135,7 @@ function HoaxImage({ src, small = false }: { src: string; small?: boolean }) {
           src="/watermark.png"
           alt="Hoaks Watermark"
           className={`object-contain opacity-90 select-none ${
-            small ? 'w-[60px] h-[60px]' : 'w-[200px] h-[200px]'
+            small ? 'w-[40px] h-[40px]' : 'w-[180px] h-[180px]'
           }`}
         />
       </div>
