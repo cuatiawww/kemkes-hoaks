@@ -1,0 +1,21 @@
+import type { Metadata } from "next";
+import "./globals.css";
+
+export const metadata: Metadata = {
+  title: "Hoaks Kesehatan - Kemenkes RI",
+  description: "Landing page pencarian dan informasi hoaks kesehatan Kementerian Kesehatan Republik Indonesia",
+};
+
+export default function RootLayout({
+  children,
+}: Readonly<{
+  children: React.ReactNode;
+}>) {
+  return (
+    <html lang="id">
+      <body className="font-roboto antialiased">
+        {children}
+      </body>
+    </html>
+  );
+}
