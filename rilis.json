@@ -1,0 +1,184 @@
+{
+  "featured": {
+    "id": 1,
+    "slug": "hapus-stigma-tbc",
+    "image": "/rilis_1.webp",
+    "dateTimestamp": 1736467200000,
+    "locale": {
+      "id": {
+        "title": "Hapus Stigma, Dukung Penderita TBC untuk Sembuh",
+        "description": "Sekretaris Jenderal Kementerian Kesehatan Kunta Wibawa Dasa Nugraha menekankan pentingnya menghapus stigma terhadap penderita...",
+        "date": "10 Januari 2026"
+      },
+      "en": {
+        "title": "Eliminate Stigma, Support TB Patients for Recovery",
+        "description": "Secretary General of the Ministry of Health Kunta Wibawa Dasa Nugraha emphasizes the importance of eliminating stigma against patients...",
+        "date": "January 10, 2026"
+      }
+    }
+  },
+  "items": [
+    {
+      "id": 11,
+      "slug": "hoaks-pfizer-rilis-daftar-efek-samping-vaksin-covid-19",
+      "image": "/Pfizer Rilis Daftar Efek Samping Vaksin Covid-19.png",
+      "dateTimestamp": 1782777600000,
+      "locale": {
+        "id": {
+          "title": "[HOAKS] Pfizer Rilis Daftar Efek Samping Vaksin Covid-19",
+          "description": "Beredar unggahan di media sosial Facebook berisi narasi yang mengeklaim bahwa Pfizer baru saja menerbitkan daftar resmi efek samping vaksin Covid-19...",
+          "date": "05 Jun 2026"
+        },
+        "en": {
+          "title": "[HOAX] Pfizer Releases List of Covid-19 Vaccine Side Effects",
+          "description": "A post is circulating on Facebook with a narrative claiming that Pfizer recently published an official list of Covid-19 vaccine side effects...",
+          "date": "June 05, 2026"
+        }
+      }
+    },
+    {
+      "id": 12,
+      "slug": "hoaks-hantavirus-efek-samping-vaksin-covid-19-pfizer",
+      "image": "/Hantavirus adalah Efek Samping Vaksin Covid-19 Pfizer.png",
+      "dateTimestamp": 1781049600000,
+      "locale": {
+        "id": {
+          "title": "[HOAKS] Hantavirus adalah Efek Samping Vaksin Covid-19 Pfizer",
+          "description": "Beredar di media sosial Facebook narasi yang mengeklaim bahwa hantavirus merupakan efek samping vaksin Covid-19 produksi Pfizer.",
+          "date": "15 Mei 2026"
+        },
+        "en": {
+          "title": "[HOAX] Hantavirus is a Side Effect of Pfizer Covid-19 Vaccine",
+          "description": "A narrative is circulating on Facebook claiming that hantavirus is a side effect of the Pfizer Covid-19 vaccine.",
+          "date": "May 15, 2026"
+        }
+      }
+    },
+    {
+      "id": 13,
+      "slug": "hoaks-vaksin-mmr-sebabkan-autisme-pada-anak",
+      "image": "/Vaksin MMR Sebabkan Autisme pada Anak.png",
+      "dateTimestamp": 1780099200000,
+      "locale": {
+        "id": {
+          "title": "[HOAKS] Vaksin MMR Sebabkan Autisme pada Anak",
+          "description": "Beredar unggahan di media sosial Facebook berisi narasi yang mengeklaim vaksin Measles, Mumps, Rubella (MMR) menyebabkan autisme pada anak.",
+          "date": "04 Mei 2026"
+        },
+        "en": {
+          "title": "[HOAX] MMR Vaccine Causes Autism in Children",
+          "description": "A post is circulating on Facebook claiming that the Measles, Mumps, Rubella (MMR) vaccine causes autism in children.",
+          "date": "May 04, 2026"
+        }
+      }
+    },
+    {
+      "id": 2,
+      "slug": "konsultasi-kesehatan-fasilitas",
+      "image": "/rilis_2.webp",
+      "dateTimestamp": 1730332800000,
+      "locale": {
+        "id": {
+          "title": "Konsultasi Kesehatan di Fasilitas Kesehatan",
+          "description": "Kementerian Kesehatan mengajak masyarakat untuk lebih aktif melakukan konsultasi kesehatan di fasilitas kesehatan terdekat untuk deteksi dini penyakit.",
+          "date": "10 Nov 2025"
+        },
+        "en": {
+          "title": "Health Consultation at Health Facilities",
+          "description": "The Ministry of Health invites the public to be more active in conducting health consultations at the nearest health facilities for early disease detection.",
+          "date": "Nov 10, 2025"
+        }
+      }
+    },
+    {
+      "id": 3,
+      "slug": "program-vaksinasi-nasional",
+      "image": "/rilis_3.webp",
+      "dateTimestamp": 1725148800000,
+      "locale": {
+        "id": {
+          "title": "Program Vaksinasi Nasional 2025",
+          "description": "Pemerintah meluncurkan program vaksinasi nasional untuk meningkatkan kekebalan masyarakat terhadap berbagai penyakit menular.",
+          "date": "01 Sep 2025"
+        },
+        "en": {
+          "title": "National Vaccination Program 2025",
+          "description": "The government launches a national vaccination program to increase public immunity against various infectious diseases.",
+          "date": "Sep 01, 2025"
+        }
+      }
+    },
+    {
+      "id": 4,
+      "slug": "peningkatan-layanan-puskesmas",
+      "image": "/rilis_4.webp",
+      "dateTimestamp": 1722470400000,
+      "locale": {
+        "id": {
+          "title": "Peningkatan Layanan Puskesmas di Seluruh Indonesia",
+          "description": "Kementerian Kesehatan terus meningkatkan kualitas layanan puskesmas dengan menambah tenaga kesehatan dan fasilitas medis.",
+          "date": "01 Agu 2025"
+        },
+        "en": {
+          "title": "Improvement of Health Center Services Throughout Indonesia",
+          "description": "The Ministry of Health continues to improve the quality of health center services by adding health personnel and medical facilities.",
+          "date": "Aug 01, 2025"
+        }
+      }
+    },
+    {
+      "id": 5,
+      "slug": "pelayanan-kesehatan-daerah-terpencil",
+      "image": "/rilis_1.webp",
+      "dateTimestamp": 1731225600000,
+      "locale": {
+        "id": {
+          "title": "Pelayanan Kesehatan untuk Masyarakat Daerah Terpencil",
+          "description": "Kementerian Kesehatan meluncurkan program baru untuk meningkatkan akses layanan kesehatan di daerah terpencil, tertinggal, dan perbatasan (3T).",
+          "date": "10 Nov 2025"
+        },
+        "en": {
+          "title": "Health Services for Remote Area Communities",
+          "description": "The Ministry of Health launches a new program to improve access to health services in remote, underdeveloped, and border areas (3T).",
+          "date": "Nov 10, 2025"
+        }
+      }
+    },
+    {
+      "id": 6,
+      "slug": "transformasi-digital-kesehatan",
+      "image": "/rilis_1.webp",
+      "dateTimestamp": 1730966400000,
+      "locale": {
+        "id": {
+          "title": "Transformasi Digital Sistem Kesehatan",
+          "description": "Peluncuran sistem digital terintegrasi untuk meningkatkan efisiensi dan kualitas pelayanan kesehatan di Indonesia.",
+          "date": "07 Nov 2025"
+        },
+        "en": {
+          "title": "Digital Transformation of the Health System",
+          "description": "Launch of an integrated digital system to improve the efficiency and quality of healthcare services in Indonesia.",
+          "date": "Nov 07, 2025"
+        }
+      }
+    },
+    {
+      "id": 7,
+      "slug": "peningkatan-sdm-kesehatan",
+      "image": "/rilis_2.webp",
+      "dateTimestamp": 1730880000000,
+      "locale": {
+        "id": {
+          "title": "Peningkatan Kualitas SDM Kesehatan",
+          "description": "Program pelatihan dan sertifikasi tenaga kesehatan untuk meningkatkan kompetensi dan profesionalisme.",
+          "date": "06 Nov 2025"
+        },
+        "en": {
+          "title": "Improving the Quality of Health Human Resources",
+          "description": "Training and certification programs for health workers to improve competence and professionalism.",
+          "date": "Nov 06, 2025"
+        }
+      }
+    }
+  ]
+}

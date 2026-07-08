@@ -1,0 +1,140 @@
+[
+  {
+    "id": 11,
+    "slug": "hoaks-pfizer-rilis-daftar-efek-samping-vaksin-covid-19",
+    "image": "/Pfizer Rilis Daftar Efek Samping Vaksin Covid-19.png",
+    "category": "Vaksinasi",
+    "dateTimestamp": 1782777600000,
+    "tags": ["pfizer", "vaksin", "covid-19", "kemenkes"],
+    "counterFact": "https://www.kominfo.go.id/content/detail/40432/hoaks-daftar-efek-samping-vaksin-covid-19-pfizer/0/laporan_isu_hoaks",
+    "locale": {
+      "id": {
+        "title": "[HOAKS] Pfizer Rilis Daftar Efek Samping Vaksin Covid-19",
+        "description": "Beredar unggahan di media sosial Facebook berisi narasi yang mengeklaim bahwa Pfizer baru saja menerbitkan daftar resmi efek samping vaksin Covid-19...",
+        "explanation": "Beredar unggahan di media sosial Facebook berisi narasi yang mengeklaim bahwa Pfizer baru saja menerbitkan daftar resmi efek samping vaksin Covid-19.\n\nFaktanya, klaim tersebut adalah tidak benar atau hoaks. Kementerian Kesehatan RI menegaskan bahwa Pfizer tidak pernah merilis daftar efek samping seperti yang diklaim di media sosial. Semua efek samping vaksin yang terdaftar secara resmi dipantau oleh BPOM dan lembaga kesehatan dunia (WHO), serta tidak mengandung efek samping ekstrem seperti yang dinarasikan secara keliru.",
+        "date": "05 Jun 2026"
+      },
+      "en": {
+        "title": "[HOAX] Pfizer Releases List of Covid-19 Vaccine Side Effects",
+        "description": "A post is circulating on Facebook with a narrative claiming that Pfizer recently published an official list of Covid-19 vaccine side effects...",
+        "explanation": "A post is circulating on Facebook with a narrative claiming that Pfizer recently published an official list of Covid-19 vaccine side effects.\n\nIn fact, this claim is false (hoax). The Ministry of Health of the Republic of Indonesia emphasizes that Pfizer has never released the side effects list claimed on social media. All officially registered vaccine side effects are monitored by BPOM and international health organizations (WHO), and they do not include extreme side effects as erroneously narrated.",
+        "date": "June 05, 2026"
+      }
+    }
+  },
+  {
+    "id": 12,
+    "slug": "hoaks-hantavirus-efek-samping-vaksin-covid-19-pfizer",
+    "image": "/Hantavirus adalah Efek Samping Vaksin Covid-19 Pfizer.png",
+    "category": "Vaksinasi",
+    "dateTimestamp": 1781049600000,
+    "tags": ["hantavirus", "pfizer", "vaksin", "covid-19"],
+    "counterFact": "https://www.kominfo.go.id/content/detail/41235/hoaks-hantavirus-merupakan-efek-samping-vaksin-covid-19-pfizer/0/laporan_isu_hoaks",
+    "locale": {
+      "id": {
+        "title": "[HOAKS] Hantavirus adalah Efek Samping Vaksin Covid-19 Pfizer",
+        "description": "Beredar di media sosial Facebook narasi yang mengeklaim bahwa hantavirus merupakan efek samping vaksin Covid-19 produksi Pfizer.",
+        "explanation": "Beredar di media sosial Facebook narasi yang mengeklaim bahwa hantavirus merupakan efek samping vaksin Covid-19 produksi Pfizer.\n\nFaktanya, klaim tersebut adalah salah. Hantavirus adalah kelompok virus yang menyebar terutama melalui tikus dan menyebabkan sindrom paru hantavirus (HPS). Virus ini sama sekali tidak berkaitan dengan kandungan atau efek samping dari vaksin Covid-19 Pfizer yang diproduksi menggunakan teknologi mRNA.",
+        "date": "15 Mei 2026"
+      },
+      "en": {
+        "title": "[HOAX] Hantavirus is a Side Effect of Pfizer Covid-19 Vaccine",
+        "description": "A narrative is circulating on Facebook claiming that hantavirus is a side effect of the Pfizer Covid-19 vaccine.",
+        "explanation": "A narrative is circulating on Facebook claiming that hantavirus is a side effect of the Pfizer Covid-19 vaccine.\n\nIn fact, this claim is false. Hantavirus is a group of viruses spread mainly by rodents and causes hantavirus pulmonary syndrome (HPS). This virus is not related in any way to the ingredients or side effects of the Pfizer Covid-19 vaccine, which is manufactured using mRNA technology.",
+        "date": "May 15, 2026"
+      }
+    }
+  },
+  {
+    "id": 13,
+    "slug": "hoaks-vaksin-mmr-sebabkan-autisme-pada-anak",
+    "image": "/Vaksin MMR Sebabkan Autisme pada Anak.png",
+    "category": "Vaksinasi",
+    "dateTimestamp": 1780099200000,
+    "tags": ["vaksin mmr", "autisme", "anak", "imunisasi"],
+    "counterFact": "https://www.kominfo.go.id/content/detail/12345/hoaks-vaksin-mmr-menyebabkan-autisme/0/laporan_isu_hoaks",
+    "locale": {
+      "id": {
+        "title": "[HOAKS] Vaksin MMR Sebabkan Autisme pada Anak",
+        "description": "Beredar unggahan di media sosial Facebook berisi narasi yang mengeklaim vaksin Measles, Mumps, Rubella (MMR) menyebabkan autisme pada anak.",
+        "explanation": "Beredar unggahan di media sosial Facebook berisi narasi yang mengeklaim vaksin Measles, Mumps, Rubella (MMR) menyebabkan autisme pada anak.\n\nFaktanya, klaim ini adalah hoaks lama yang terus berulang. Berbagai penelitian ilmiah skala besar di seluruh dunia yang melibatkan jutaan anak telah membuktikan secara konsisten bahwa tidak ada hubungan antara vaksin MMR dengan kejadian autisme pada anak. Penelitian awal tahun 1998 yang mengklaim hubungan tersebut telah ditarik oleh jurnal medis Lancet karena terbukti menggunakan data palsu dan metode yang cacat.",
+        "date": "04 Mei 2026"
+      },
+      "en": {
+        "title": "[HOAX] MMR Vaccine Causes Autism in Children",
+        "description": "A post is circulating on Facebook claiming that the Measles, Mumps, Rubella (MMR) vaccine causes autism in children.",
+        "explanation": "A post is circulating on Facebook claiming that the Measles, Mumps, Rubella (MMR) vaccine causes autism in children.\n\nIn fact, this claim is a long-standing hoax. Numerous large-scale scientific studies worldwide involving millions of children have consistently proven that there is no link between the MMR vaccine and autism. The initial 1998 study claiming this link was retracted by the Lancet medical journal after it was proven to have used fabricated data and flawed methods.",
+        "date": "May 04, 2026"
+      }
+    }
+  },
+  {
+    "id": 14,
+    "slug": "hoaks-erick-thohir-sebut-vaksin-covid-19-dipasangi-chip",
+    "image": "/Erick Thohir Sebut Vaksin Covid-19 Dipasangi Chip.png",
+    "category": "Vaksinasi",
+    "dateTimestamp": 1779235200000,
+    "tags": ["erick thohir", "vaksin", "chip", "pelacak"],
+    "counterFact": "https://www.kominfo.go.id/content/detail/34567/hoaks-erick-thohir-sebut-vaksin-covid-19-dipasangi-chip/0/laporan_isu_hoaks",
+    "locale": {
+      "id": {
+        "title": "[HOAKS] Erick Thohir Sebut Vaksin Covid-19 Dipasangi Chip",
+        "description": "Beredar narasi di media sosial yang mengeklaim Menteri BUMN Erick Thohir menyatakan bahwa vaksin Covid-19 dipasangi chip untuk melacak masyarakat.",
+        "explanation": "Beredar narasi di media sosial yang mengeklaim Menteri BUMN Erick Thohir menyatakan bahwa vaksin Covid-19 dipasangi chip untuk melacak masyarakat.\n\nFaktanya, klaim tersebut sepenuhnya salah (hoaks). Informasi ini merupakan pelintiran dari pernyataan resmi mengenai pendataan dan distribution vaksin menggunakan kode QR untuk pelacakan logistik vaksin, bukan menanamkan chip fisik pelacak ke dalam tubuh manusia. Komponen vaksin Covid-19 murni terdiri dari bahan aktif imunogenik, lipid, garam, dan gula untuk memicu respons kekebalan tubuh.",
+        "date": "24 Apr 2026"
+      },
+      "en": {
+        "title": "[HOAX] Erick Thohir Says Covid-19 Vaccine is Fitted with a Chip",
+        "description": "A narrative circulating on social media claims that SOE Minister Erick Thohir stated that the Covid-19 vaccine is fitted with a chip to track the public.",
+        "explanation": "A narrative circulating on social media claims that SOE Minister Erick Thohir stated that the Covid-19 vaccine is fitted with a chip to track the public.\n\nIn fact, this claim is completely false (hoax). This information is a distortion of official statements regarding vaccine data collection and distribution using QR codes for vaccine logistics tracking, not implanting tracking microchips into the human body. The components of the Covid-19 vaccine consist purely of active immunogenic ingredients, lipids, salts, and sugars to trigger the body's immune response.",
+        "date": "April 24, 2026"
+      }
+    }
+  },
+  {
+    "id": 15,
+    "slug": "hoaks-vaksin-sengaja-membuat-anak-sakit-demi-keuntungan",
+    "image": "/Vaksin Sengaja Membuat Anak Sakit demi Keuntungan.png",
+    "category": "Pengobatan",
+    "dateTimestamp": 1778371200000,
+    "tags": ["vaksin", "anak sakit", "keuntungan", "farmasi"],
+    "counterFact": "https://www.kominfo.go.id/content/detail/23456/hoaks-vaksin-sengaja-membuat-anak-sakit-demi-keuntungan/0/laporan_isu_hoaks",
+    "locale": {
+      "id": {
+        "title": "[HOAKS] Vaksin Sengaja Membuat Anak Sakit demi Keuntungan",
+        "description": "Beredar unggahan yang mengeklaim bahwa vaksinasi sengaja dirancang untuk membuat anak-anak jatuh sakit demi keuntungan industri farmasi.",
+        "explanation": "Beredar unggahan yang mengeklaim bahwa vaksinasi sengaja dirancang untuk membuat anak-anak jatuh sakit demi keuntungan industri farmasi.\n\nFaktanya, tuduhan ini adalah hoaks dan teori konspirasi yang tidak berdasar. Vaksin terbukti aman dan melewati berbagai tahapan uji klinis yang sangat ketat sebelum disetujui untuk digunakan secara massal. Program vaksinasi nasional bertujuan melindungi anak dari berbagai penyakit menular berbahaya seperti polio, campak, difteri, dan tetanus yang dapat menyebabkan kecacatan hingga kematian.",
+        "date": "14 Apr 2026"
+      },
+      "en": {
+        "title": "[HOAX] Vaccines Intentionally Make Children Sick for Profit",
+        "description": "A post is circulating claiming that vaccines are intentionally designed to make children sick for the profit of the pharmaceutical industry.",
+        "explanation": "In fact, this accusation is a hoax and an unfounded conspiracy theory. Vaccines are proven to be safe and undergo highly rigorous clinical trial phases before being approved for mass use. The national vaccination program aims to protect children from various dangerous infectious diseases such as polio, measles, diphtheria, and tetanus which can cause disability or death.",
+        "date": "April 14, 2026"
+      }
+    }
+  },
+  {
+    "id": 16,
+    "slug": "hoaks-virus-marburg-dapat-diaktifkan-melalui-5g",
+    "image": "https://images.unsplash.com/photo-1584036561566-baf8f5f1b144?auto=format&fit=crop&w=1200&q=80",
+    "category": "Obat-obatan",
+    "dateTimestamp": 1780272000000,
+    "tags": ["virus marburg", "5g", "vaksinasi", "pandemi"],
+    "counterFact": "https://www.kominfo.go.id/content/detail/30123/hoaks-virus-marburg-bisa-diaktifkan-lewat-5g/0/laporan_isu_hoaks",
+    "locale": {
+      "id": {
+        "title": "[HOAKS] Virus Marburg Dapat Diaktifkan melalui 5G",
+        "description": "Beredar sebuah unggahan video di media sosial Facebook yang mengklaim virus Marburg dapat diaktifkan melalui 5G bagi semua orang yang telah divaksinasi...",
+        "explanation": "Beredar sebuah unggahan video di media sosial Facebook yang mengklaim virus Marburg dapat diaktifkan melalui 5G bagi semua orang yang telah divaksinasi. Penyebaran virus Marburg diklaim sebagai pandemi berikutnya dan merupakan virus paling mematikan di bumi.\n\nFaktanya, klaim yang menyebutkan bahwa virus Marburg dapat diaktifkan melalui sinyal 5G adalah hoaks. Dilansir dari tirto.id, tidak ada mekanisme fisik atau biologis yang memungkinkan sinyal jaringan nirkabel mengaktifkan virus di dalam tubuh manusia. Tidak ada penelitian dan bukti ilmiah yang menunjukkan bahwa virus Marburg dapat diaktifkan oleh 5G.",
+        "date": "01 Jul 2026"
+      },
+      "en": {
+        "title": "[HOAX] Marburg Virus Can Be Activated via 5G",
+        "description": "A video post is circulating on Facebook claiming that the Marburg virus can be activated via 5G for everyone who has been vaccinated...",
+        "explanation": "A video post is circulating on Facebook claiming that the Marburg virus can be activated via 5G for everyone who has been vaccinated. The spread of the Marburg virus is claimed to be the next pandemic and is the most deadly virus on earth.\n\nIn fact, the claim that the Marburg virus can be activated through 5G signals is a hoax. As reported by tirto.id, there is no physical or biological mechanism that allows wireless network signals to activate viruses in the human body. There is no research and scientific evidence showing that the Marburg virus can be activated by 5G.",
+        "date": "July 01, 2026"
+      }
+    }
+  }
+]
