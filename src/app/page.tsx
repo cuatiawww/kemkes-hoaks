@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation'
 import {
   CalendarDays,
   CheckCircle2,
+  ChevronLeft,
   ChevronRight,
   CircleUserRound,
   FileText,
@@ -184,9 +185,39 @@ export default function HomePage({ searchParams }: HomePageProps) {
         description: item.locale.id.description,
       }))
 
+  const [currentPage, setCurrentPage] = useState(1)
+  const ITEMS_PER_PAGE = 4
+
+  // Reset page to 1 when filters change
+  useEffect(() => {
+    setCurrentPage(1)
+  }, [searchQuery, selectedCategory])
+
   const toggleCategory = (label: string, count: number) => {
     if (count === 0) return
     setSelectedCategory((prev) => (prev === label ? null : label))
+  }
+
+  const totalPages = Math.ceil(displayPopular.length / ITEMS_PER_PAGE)
+  const paginatedPopular = displayPopular.slice((currentPage - 1) * ITEMS_PER_PAGE, currentPage * ITEMS_PER_PAGE)
+
+  const getVisiblePages = () => {
+    const pages: number[] = []
+    const actualTotalPages = Math.max(totalPages, 1)
+    const range = 2 // Number of pages to show before and after current page
+    let start = Math.max(currentPage - range, 1)
+    let end = Math.min(currentPage + range, actualTotalPages)
+
+    if (currentPage <= range) {
+      end = Math.min(5, actualTotalPages)
+    } else if (currentPage + range >= actualTotalPages) {
+      start = Math.max(actualTotalPages - 4, 1)
+    }
+
+    for (let i = start; i <= end; i++) {
+      pages.push(i)
+    }
+    return pages
   }
 
   return (
@@ -325,42 +356,84 @@ export default function HomePage({ searchParams }: HomePageProps) {
             </div>
           </aside>
 
-          <div
-            className="space-y-8 lg:max-h-[680px] lg:overflow-y-auto lg:pr-4"
-            style={{
-              scrollbarWidth: 'thin',
-              scrollbarColor: '#07877c #f1f1f1'
-            }}
-          >
-            {displayPopular.length > 0 ? (
-              displayPopular.map((article) => (
-                <Link
-                  key={article.title}
-                  href={`/detail?slug=${article.slug}`}
-                  className="group grid gap-6 pb-6 border-b border-slate-200 last:border-0 last:pb-0 transition-all duration-300 sm:grid-cols-[180px_1fr] hover:translate-x-1"
-                >
-                  <ArticleImage src={article.image} compact />
-                  <div className="flex flex-col justify-between py-1 min-w-0">
-                    <div>
-                      <h3 className="text-lg font-extrabold leading-snug text-slate-800 group-hover:text-[#07877c] transition-colors truncate">
-                        {article.title}
-                      </h3>
-                      <p className="mt-2 line-clamp-2 text-sm font-medium text-slate-500 leading-relaxed">
-                        {article.description}
+          <div className="flex flex-col justify-between min-w-0">
+            <div 
+              className="space-y-8 lg:max-h-[680px] lg:overflow-y-auto lg:pr-4"
+              style={{
+                scrollbarWidth: 'thin',
+                scrollbarColor: '#07877c #f1f1f1'
+              }}
+            >
+              {paginatedPopular.length > 0 ? (
+                paginatedPopular.map((article) => (
+                  <Link
+                    key={article.title}
+                    href={`/detail?slug=${article.slug}`}
+                    className="group grid gap-6 pb-6 border-b border-slate-200 last:border-0 last:pb-0 transition-all duration-300 sm:grid-cols-[180px_1fr] hover:translate-x-1"
+                  >
+                    <ArticleImage src={article.image} compact />
+                    <div className="flex flex-col justify-between py-1 min-w-0">
+                      <div>
+                        <h3 className="text-lg font-extrabold leading-snug text-slate-800 group-hover:text-[#07877c] transition-colors truncate">
+                          {article.title}
+                        </h3>
+                        <p className="mt-2 line-clamp-2 text-sm font-medium text-slate-500 leading-relaxed">
+                          {article.description}
+                        </p>
+                      </div>
+                      <p className="mt-3 text-xs font-semibold text-slate-400">
+                        {article.date} <span className="px-3">•</span> Dilihat 708 Kali <span className="px-3">•</span> Waktu Baca 3 Menit
                       </p>
                     </div>
-                    <p className="mt-3 text-xs font-semibold text-slate-400">
-                      {article.date} <span className="px-3">•</span> Dilihat 708 Kali <span className="px-3">•</span> Waktu Baca 3 Menit
-                    </p>
-                  </div>
-                </Link>
-              ))
-            ) : (
-              <div className="border border-slate-200 rounded-2xl p-12 text-center shadow-sm bg-white/40">
-                <h3 className="text-xl font-extrabold text-[#747474] mb-2">Hasil tidak ditemukan</h3>
-                <p className="text-sm font-semibold text-[#9a9a9a]">
-                  Coba kata kunci lain atau pilih kategori hoaks yang memiliki data.
-                </p>
+                  </Link>
+                ))
+              ) : (
+                <div className="border border-slate-200 rounded-2xl p-12 text-center shadow-sm bg-white/40">
+                  <h3 className="text-xl font-extrabold text-[#747474] mb-2">Hasil tidak ditemukan</h3>
+                  <p className="text-sm font-semibold text-[#9a9a9a]">
+                    Coba kata kunci lain atau pilih kategori hoaks yang memiliki data.
+                  </p>
+                </div>
+              )}
+            </div>
+
+            {/* Pagination Controls */}
+            {totalPages >= 0 && (
+              <div className="flex flex-wrap items-center justify-center gap-3 mt-12 pb-4">
+                <button
+                  onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
+                  disabled={currentPage === 1}
+                  className="h-10 px-5 rounded-full bg-[#07877c]/10 text-[#07877c] font-extrabold text-xs flex items-center gap-1.5 hover:bg-[#07877c]/20 disabled:opacity-40 disabled:cursor-not-allowed transition-all"
+                >
+                  <ChevronLeft className="h-4 w-4" />
+                  <span>Sebelumnya</span>
+                </button>
+
+                {getVisiblePages().map((pageNum) => {
+                  const isActive = currentPage === pageNum
+                  return (
+                    <button
+                      key={pageNum}
+                      onClick={() => setCurrentPage(pageNum)}
+                      className={`h-10 w-10 rounded-full font-bold text-sm flex items-center justify-center transition-all ${
+                        isActive
+                          ? 'bg-[#07877c] text-white shadow-md font-extrabold scale-105'
+                          : 'bg-[#07877c]/10 text-[#07877c] hover:bg-[#07877c]/20'
+                      }`}
+                    >
+                      {pageNum}
+                    </button>
+                  )
+                })}
+
+                <button
+                  onClick={() => setCurrentPage((prev) => Math.min(prev + 1, Math.max(totalPages, 1)))}
+                  disabled={currentPage >= Math.max(totalPages, 1)}
+                  className="h-10 px-5 rounded-full bg-[#07877c]/10 text-[#07877c] font-extrabold text-xs flex items-center gap-1.5 hover:bg-[#07877c]/20 disabled:opacity-40 disabled:cursor-not-allowed transition-all"
+                >
+                  <span>Selanjutnya</span>
+                  <ChevronRight className="h-4 w-4" />
+                </button>
               </div>
             )}
           </div>
