@@ -24,9 +24,7 @@ import Link from 'next/link'
 
 import hoaksData from '@/data/hoaks.json'
 import SiteHeader from '@/components/SiteHeader'
-
-const heroImage =
-  'https://images.unsplash.com/photo-1585829365295-ab7cd400c167?auto=format&fit=crop&w=1800&q=80'
+import HomeHero from '@/components/HomeHero'
 
 function ArticleImage({ src, compact = false }: { src: string; compact?: boolean }) {
   return (
@@ -138,25 +136,12 @@ export default function HomePage({ searchParams }: HomePageProps) {
   const [searchInput, setSearchInput] = useState(initialQuery)
   const [searchQuery, setSearchQuery] = useState(initialQuery)
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null)
-  const [showSuggestions, setShowSuggestions] = useState(false)
-  const searchRef = useRef<HTMLDivElement>(null)
 
   // Update query if URL searchParams change
   useEffect(() => {
     setSearchInput(initialQuery)
     setSearchQuery(initialQuery)
   }, [initialQuery])
-
-  // Click outside to close suggestions
-  useEffect(() => {
-    const handleClickOutside = (event: MouseEvent) => {
-      if (searchRef.current && !searchRef.current.contains(event.target as Node)) {
-        setShowSuggestions(false)
-      }
-    }
-    document.addEventListener('mousedown', handleClickOutside)
-    return () => document.removeEventListener('mousedown', handleClickOutside)
-  }, [])
 
   // Dynamic category calculations
   const categories = [
@@ -168,15 +153,7 @@ export default function HomePage({ searchParams }: HomePageProps) {
     { label: 'Artikel Berita', count: hoaksData.filter((item) => item.category === 'Artikel Berita').length, icon: Newspaper },
   ]
 
-  // Filter matching suggestions
-  const suggestions =
-    searchInput.trim().length >= 2
-      ? hoaksData
-          .filter((item) =>
-            item.locale.id.title.toLowerCase().includes(searchInput.toLowerCase())
-          )
-          .slice(0, 5)
-      : []
+
 
   // Filter hoaxes for display
   const filteredHoaxes = hoaksData.filter((item) => {
@@ -212,127 +189,51 @@ export default function HomePage({ searchParams }: HomePageProps) {
     setSelectedCategory((prev) => (prev === label ? null : label))
   }
 
-  const handleSearchSubmit = (e?: React.FormEvent) => {
-    e?.preventDefault()
-    setSearchQuery(searchInput)
-    setShowSuggestions(false)
-  }
-
-  const handlePopularSearchClick = (tag: string) => {
-    setSearchInput(tag)
-    setSearchQuery(tag)
-    setShowSuggestions(false)
-  }
-
   return (
     <main className="min-h-screen bg-[#f4f4f4] text-[#4f4f4f]">
       <SiteHeader />
 
-      <section className="mx-auto max-w-[1160px] px-4">
-        <div className="bg-white">
-          <div className="inline-flex bg-[#07877c] px-4 py-2 text-xs font-extrabold uppercase text-white">
+      {/* Marquee Banner Section */}
+      <div className="mx-auto max-w-[1160px] px-4 mt-6">
+        <div className="relative flex overflow-x-hidden border border-slate-200 rounded-lg bg-white h-10 items-center shadow-[0_1px_2px_rgba(0,0,0,0.02)]">
+          <style>{`
+            @keyframes marquee-scroll {
+              0% { transform: translateX(0%); }
+              100% { transform: translateX(-50%); }
+            }
+            .animate-marquee-scroll {
+              display: flex;
+              width: max-content;
+              animation: marquee-scroll 35s linear infinite;
+            }
+          `}</style>
+          
+          {/* Label */}
+          <div className="absolute left-0 top-0 bottom-0 bg-[#07877c] px-5 flex items-center text-xs font-black uppercase text-white z-20 whitespace-nowrap rounded-l-lg">
             Informasi Terkini
           </div>
-          <div
-            className="relative min-h-[360px] bg-cover bg-center"
-            style={{ backgroundImage: `url(${heroImage})` }}
-          >
-            <div className="absolute inset-0 bg-gradient-to-br from-[#10b9ae]/90 via-[#07958f]/85 to-[#005e66]/95" />
-            <div className="relative z-10 mx-auto flex min-h-[360px] max-w-[920px] flex-col items-center justify-center px-5 py-12 text-center text-white">
-              <h1 className="text-3xl font-bold tracking-tight sm:text-4xl md:text-[42px]">
-                Telusuri 1.241 Isu Hoaks Kesehatan
-              </h1>
-              <p className="mt-3 max-w-lg text-base font-medium leading-snug text-white/95">
-                Cari dan temukan berbagai isu hoaks disini, jangan sampai termakan Hoaks!
-              </p>
-              <form onSubmit={handleSearchSubmit} className="mt-9 flex w-full max-w-[870px] flex-col gap-4 sm:flex-row">
-                <div ref={searchRef} className="relative flex-1">
-                  <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400 z-10" />
-                  <input
-                    value={searchInput}
-                    onChange={(e) => {
-                      setSearchInput(e.target.value)
-                      setShowSuggestions(true)
-                    }}
-                    onFocus={() => setShowSuggestions(true)}
-                    placeholder="Cari penyakit, gejala, atau tips untuk hidup lebih sehat..."
-                    className="h-[56px] w-full rounded-xl border border-slate-300 bg-white pl-12 pr-12 text-base text-slate-700 shadow-sm outline-none focus:ring-2 focus:ring-[#1ebdb8] focus:border-transparent transition-all placeholder:text-slate-400"
-                    autoComplete="off"
-                  />
-                  {searchInput && (
-                    <button
-                      type="button"
-                      onClick={() => {
-                        setSearchInput('')
-                        setSearchQuery('')
-                      }}
-                      className="absolute right-4 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 font-semibold"
-                    >
-                      ✕
-                    </button>
-                  )}
-                  {showSuggestions && searchInput.trim().length >= 2 && (
-                    <div className="absolute top-full left-0 right-0 mt-2 bg-white rounded-xl shadow-lg border border-slate-200 overflow-hidden z-50 py-2 max-h-[350px] overflow-y-auto">
-                      {suggestions.length > 0 ? (
-                        suggestions.map((item) => (
-                          <button
-                            key={item.id}
-                            type="button"
-                            onClick={() => {
-                              setSearchInput(item.locale.id.title)
-                              setSearchQuery(item.locale.id.title)
-                              setShowSuggestions(false)
-                              router.push(`/detail?slug=${item.slug}`)
-                            }}
-                            className="w-full px-5 py-3 hover:bg-slate-50 flex items-center justify-between gap-3 transition-colors text-left group"
-                          >
-                            <div className="flex items-center gap-3 flex-1 min-w-0">
-                              <Search className="w-4 h-4 text-slate-400 group-hover:text-[#07877c] flex-shrink-0" />
-                              <div className="min-w-0 flex-1">
-                                <p className="text-sm font-semibold text-slate-900 group-hover:text-[#07877c] truncate">
-                                  {item.locale.id.title}
-                                </p>
-                                <p className="text-xs text-slate-500 mt-0.5">{item.category}</p>
-                              </div>
-                            </div>
-                            <span className="text-[10px] bg-slate-100 text-slate-600 px-2 py-0.5 rounded-full font-bold flex-shrink-0">
-                              Detail
-                            </span>
-                          </button>
-                        ))
-                      ) : (
-                        <div className="px-5 py-4 text-sm text-slate-500 text-center">
-                          Tidak ada saran pencarian.
-                        </div>
-                      )}
-                    </div>
-                  )}
-                </div>
-                <button
-                  type="submit"
-                  className="h-[56px] rounded-xl bg-[#1ebdb8] px-10 text-lg font-bold text-white shadow-sm hover:bg-[#18aaa5] transition-all hover:scale-102 flex items-center justify-center gap-2"
-                >
-                  <Search className="w-5 h-5" />
-                  <span>Cari</span>
-                </button>
-              </form>
-              <div className="mt-6 flex flex-wrap items-center justify-center gap-2 text-sm">
-                <span className="font-semibold text-white/90">Topik Populer:</span>
-                {['Vaksin', 'HIV', 'Virus', 'BPJS', 'Imunisasi'].map((tag) => (
-                  <button
-                    key={tag}
-                    type="button"
-                    onClick={() => handlePopularSearchClick(tag)}
-                    className="px-4 py-1.5 bg-white/20 hover:bg-white hover:text-[#07877c] text-white text-sm rounded-full transition-all duration-300 border border-white/30 font-semibold"
-                  >
-                    {tag
-                  }</button>
-                ))}
-              </div>
-            </div>
+          
+          {/* Marquee Track */}
+          <div className="animate-marquee-scroll whitespace-nowrap pl-[160px] text-xs font-bold text-slate-600 flex items-center h-full">
+            <span className="inline-block mx-4">• Portal Resmi Terpadu Rumah Sakit Kemenkes RI: Akses Layanan Kesehatan Terpusat</span>
+            <span className="inline-block mx-4">• Panduan Layanan Kesehatan Masyarakat 2026</span>
+            <span className="inline-block mx-4">• Laporkan Isu Hoaks melalui WhatsApp Official</span>
+            <span className="inline-block mx-4">• Selalu Cek Keaslian Berita Sebelum Membagikan</span>
+            <span className="inline-block mx-4">• Portal Resmi Terpadu Rumah Sakit Kemenkes RI: Akses Layanan Kesehatan Terpusat</span>
+            <span className="inline-block mx-4">• Panduan Layanan Kesehatan Masyarakat 2026</span>
+            <span className="inline-block mx-4">• Laporkan Isu Hoaks melalui WhatsApp Official</span>
+            <span className="inline-block mx-4">• Selalu Cek Keaslian Berita Sebelum Membagikan</span>
           </div>
         </div>
-      </section>
+      </div>
+
+      <div className="mt-6">
+        <HomeHero
+          searchInput={searchInput}
+          setSearchInput={setSearchInput}
+          setSearchQuery={setSearchQuery}
+        />
+      </div>
 
       <section className="mx-auto max-w-[1160px] px-4 pb-28 pt-12">
         <h2 className="text-2xl font-extrabold uppercase tracking-wide text-[#747474]">Hoaks Kesehatan Terbaru</h2>

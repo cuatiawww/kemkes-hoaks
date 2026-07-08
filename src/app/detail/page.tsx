@@ -4,6 +4,7 @@ import { use, useState, useEffect, useRef } from 'react'
 import { useRouter } from 'next/navigation'
 import {
   CheckCircle2,
+  ChevronLeft,
   ChevronRight,
   CircleUserRound,
   Home,
@@ -13,157 +14,106 @@ import {
   Phone,
   PlayCircle,
   Search,
-  ShieldCheck,
 } from 'lucide-react'
 import Link from 'next/link'
 import hoaksData from '@/data/hoaks.json'
 import SiteHeader from '@/components/SiteHeader'
+import HomeHero from '@/components/HomeHero'
 
-const heroImage =
-  'https://images.unsplash.com/photo-1585829365295-ab7cd400c167?auto=format&fit=crop&w=1800&q=80'
+function SidebarLatestSlider() {
+  const [currentIndex, setCurrentIndex] = useState(0)
+  const items = hoaksData.slice(0, 4)
 
-function HeroSearch() {
-  const router = useRouter()
-  const [searchInput, setSearchInput] = useState('')
-  const [showSuggestions, setShowSuggestions] = useState(false)
-  const searchRef = useRef<HTMLDivElement>(null)
-
-  // Click outside to close suggestions
   useEffect(() => {
-    const handleClickOutside = (event: MouseEvent) => {
-      if (searchRef.current && !searchRef.current.contains(event.target as Node)) {
-        setShowSuggestions(false)
-      }
-    }
-    document.addEventListener('mousedown', handleClickOutside)
-    return () => document.removeEventListener('mousedown', handleClickOutside)
-  }, [])
+    const timer = setInterval(() => {
+      setCurrentIndex((prev) => (prev + 1) % items.length)
+    }, 4000)
+    return () => clearInterval(timer)
+  }, [items.length])
 
-  // Filter matching suggestions
-  const suggestions =
-    searchInput.trim().length >= 2
-      ? hoaksData
-          .filter((item) =>
-            item.locale.id.title.toLowerCase().includes(searchInput.toLowerCase())
-          )
-          .slice(0, 5)
-      : []
-
-  const handleSearchSubmit = (e: React.FormEvent) => {
-    e.preventDefault()
-    if (searchInput.trim()) {
-      router.push(`/?q=${encodeURIComponent(searchInput.trim())}`)
-    }
+  const handlePrev = () => {
+    setCurrentIndex((prev) => (prev - 1 + items.length) % items.length)
   }
 
-  const handlePopularSearchClick = (tag: string) => {
-    router.push(`/?q=${encodeURIComponent(tag)}`)
+  const handleNext = () => {
+    setCurrentIndex((prev) => (prev + 1) % items.length)
   }
 
   return (
-    <section className="mx-auto max-w-[1160px] px-4">
-      <div className="bg-white">
-        <div className="inline-flex bg-[#07877c] px-4 py-2 text-xs font-extrabold uppercase text-white">
-          Informasi Terkini
-        </div>
-        <div
-          className="relative min-h-[360px] bg-cover bg-center"
-          style={{ backgroundImage: `url(${heroImage})` }}
-        >
-          <div className="absolute inset-0 bg-gradient-to-br from-[#10b9ae]/90 via-[#07958f]/85 to-[#005e66]/95" />
-          <div className="relative z-10 mx-auto flex min-h-[360px] max-w-[920px] flex-col items-center justify-center px-5 py-12 text-center text-white">
-            <h1 className="text-3xl font-bold tracking-tight sm:text-4xl md:text-[42px]">
-              Telusuri 1.241 Isu Hoaks Kesehatan
-            </h1>
-            <p className="mt-3 max-w-lg text-base font-medium leading-snug text-white/95">
-              Cari dan temukan berbagai isu hoaks disini, jangan sampai termakan Hoaks!
-            </p>
-            
-            <form onSubmit={handleSearchSubmit} className="mt-9 flex w-full max-w-[870px] flex-col gap-4 sm:flex-row">
-              <div ref={searchRef} className="relative flex-1">
-                <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400 z-10" />
-                <input
-                  value={searchInput}
-                  onChange={(e) => {
-                    setSearchInput(e.target.value)
-                    setShowSuggestions(true)
-                  }}
-                  onFocus={() => setShowSuggestions(true)}
-                  placeholder="Cari penyakit, gejala, atau tips untuk hidup lebih sehat..."
-                  className="h-[56px] w-full rounded-xl border border-slate-300 bg-white pl-12 pr-12 text-base text-slate-700 shadow-sm outline-none focus:ring-2 focus:ring-[#1ebdb8] focus:border-transparent transition-all placeholder:text-slate-400"
-                  autoComplete="off"
+    <div className="mt-10">
+      <h2 className="text-xl font-extrabold text-slate-800 flex items-center gap-2 mb-4">
+        <span className="w-1.5 h-6 bg-[#07877c] rounded-full" />
+        Hoaks Terbaru
+      </h2>
+      
+      <div className="relative h-[220px] w-full overflow-hidden rounded-2xl shadow-sm">
+        {items.map((item, idx) => (
+          <Link
+            key={item.slug}
+            href={`/detail?slug=${item.slug}`}
+            className={`absolute inset-0 block transition-opacity duration-700 ease-in-out ${
+              idx === currentIndex ? 'opacity-100 z-10 pointer-events-auto' : 'opacity-0 z-0 pointer-events-none'
+            }`}
+          >
+            <div
+              className="absolute inset-0 bg-cover bg-center"
+              style={{ backgroundImage: `url("${encodeURI(item.image)}")` }}
+            >
+              <div className="absolute inset-0 bg-black/5" />
+              <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
+                <img
+                  src="/watermark.png"
+                  alt="Hoaks Watermark"
+                  className="object-contain opacity-90 select-none w-[140px] h-[140px]"
                 />
-                {searchInput && (
-                  <button
-                    type="button"
-                    onClick={() => setSearchInput('')}
-                    className="absolute right-4 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 font-semibold"
-                  >
-                    ✕
-                  </button>
-                )}
-                {showSuggestions && searchInput.trim().length >= 2 && (
-                  <div className="absolute top-full left-0 right-0 mt-2 bg-white rounded-xl shadow-lg border border-slate-200 overflow-hidden z-50 py-2 max-h-[350px] overflow-y-auto">
-                    {suggestions.length > 0 ? (
-                      suggestions.map((item) => (
-                        <button
-                          key={item.id}
-                          type="button"
-                          onClick={() => {
-                            setSearchInput(item.locale.id.title)
-                            setShowSuggestions(false)
-                            router.push(`/detail?slug=${item.slug}`)
-                          }}
-                          className="w-full px-5 py-3 hover:bg-slate-50 flex items-center justify-between gap-3 transition-colors text-left group"
-                        >
-                          <div className="flex items-center gap-3 flex-1 min-w-0">
-                            <Search className="w-4 h-4 text-slate-400 group-hover:text-[#07877c] flex-shrink-0" />
-                            <div className="min-w-0 flex-1">
-                              <p className="text-sm font-semibold text-slate-900 group-hover:text-[#07877c] truncate">
-                                {item.locale.id.title}
-                              </p>
-                              <p className="text-xs text-slate-500 mt-0.5">{item.category}</p>
-                            </div>
-                          </div>
-                          <span className="text-[10px] bg-slate-100 text-slate-600 px-2 py-0.5 rounded-full font-bold flex-shrink-0">
-                            Detail
-                          </span>
-                        </button>
-                      ))
-                    ) : (
-                      <div className="px-5 py-4 text-sm text-slate-500 text-center">
-                        Tidak ada saran pencarian.
-                      </div>
-                    )}
-                  </div>
-                )}
               </div>
-              <button
-                type="submit"
-                className="h-[56px] rounded-xl bg-[#1ebdb8] px-10 text-lg font-bold text-white shadow-sm hover:bg-[#18aaa5] transition-all hover:scale-102 flex items-center justify-center gap-2"
-              >
-                <Search className="w-5 h-5" />
-                <span>Cari</span>
-              </button>
-            </form>
-
-            <div className="mt-6 flex flex-wrap items-center justify-center gap-2 text-sm">
-              <span className="font-semibold text-white/90">Topik Populer:</span>
-              {['Vaksin', 'HIV', 'Virus', 'BPJS', 'Imunisasi'].map((tag) => (
-                <button
-                  key={tag}
-                  type="button"
-                  onClick={() => handlePopularSearchClick(tag)}
-                  className="px-4 py-1.5 bg-white/20 hover:bg-white hover:text-[#07877c] text-white text-sm rounded-full transition-all duration-300 border border-white/30 font-semibold"
-                >
-                  {tag}
-                </button>
-              ))}
             </div>
-          </div>
-        </div>
+
+            <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/30 to-transparent" />
+
+            <div className="absolute bottom-0 left-0 right-0 p-5 text-white">
+              <h3 className="text-base font-extrabold leading-snug line-clamp-2 hover:underline">
+                {item.locale.id.title}
+              </h3>
+              <p className="mt-2 text-[11px] text-white/70 font-medium">
+                {item.locale.id.date} &bull; Waktu Baca 3 Menit
+              </p>
+            </div>
+          </Link>
+        ))}
       </div>
-    </section>
+
+      <div className="flex items-center justify-between mt-4 px-1">
+        <button
+          onClick={handlePrev}
+          className="h-10 w-10 rounded-full border border-slate-300 flex items-center justify-center text-slate-500 bg-white hover:bg-slate-50 hover:text-slate-700 transition"
+          aria-label="Previous slide"
+        >
+          <ChevronLeft className="h-5 w-5" />
+        </button>
+
+        <div className="flex gap-2">
+          {items.map((_, idx) => (
+            <button
+              key={idx}
+              onClick={() => setCurrentIndex(idx)}
+              className={`h-2 rounded-full transition-all duration-300 ${
+                currentIndex === idx ? 'w-5 bg-red-600' : 'w-2 bg-slate-300'
+              }`}
+              aria-label={`Go to slide ${idx + 1}`}
+            />
+          ))}
+        </div>
+
+        <button
+          onClick={handleNext}
+          className="h-10 w-10 rounded-full border border-slate-300 flex items-center justify-center text-slate-500 bg-white hover:bg-slate-50 hover:text-slate-700 transition"
+          aria-label="Next slide"
+        >
+          <ChevronRight className="h-5 w-5" />
+        </button>
+      </div>
+    </div>
   )
 }
 
@@ -234,6 +184,7 @@ interface DetailPageProps {
 export default function DetailPage({ searchParams }: DetailPageProps) {
   const resolvedParams = use(searchParams)
   const slug = resolvedParams?.slug || ''
+  const [searchInput, setSearchInput] = useState('')
 
   const hoax =
     hoaksData.find((item) => item.slug === slug) ||
@@ -245,7 +196,9 @@ export default function DetailPage({ searchParams }: DetailPageProps) {
   return (
     <main className="min-h-screen bg-[#f4f4f4] text-[#4f4f4f]">
       <SiteHeader />
-      <HeroSearch />
+      <div className="mt-6">
+        <HomeHero searchInput={searchInput} setSearchInput={setSearchInput} />
+      </div>
 
       <section className="mx-auto grid max-w-[1160px] gap-12 px-4 pt-10 lg:grid-cols-[1fr_390px] pb-28">
         <article className="min-w-0">
@@ -332,9 +285,6 @@ export default function DetailPage({ searchParams }: DetailPageProps) {
                 <div className="flex gap-4 items-start">
                   <HoaxImage src={item.image} small />
                   <div className="flex-1 min-w-0">
-                    <span className="text-[10px] font-bold text-red-500 bg-red-50 px-2 py-0.5 rounded uppercase tracking-wider">
-                      {item.category}
-                    </span>
                     <h3 className="mt-1.5 text-sm font-extrabold leading-snug text-slate-800 group-hover:text-[#07877c] transition-colors line-clamp-3">
                       {item.locale.id.title}
                     </h3>
@@ -350,6 +300,28 @@ export default function DetailPage({ searchParams }: DetailPageProps) {
             Lihat Hoaks Lainnya
             <ChevronRight className="h-4 w-4" />
           </Link>
+
+          <SidebarLatestSlider />
+
+          <div className="mt-10 bg-gradient-to-br from-[#07877c] to-[#056058] rounded-2xl p-6 text-white shadow-sm relative overflow-hidden">
+            <div className="absolute -right-8 -bottom-8 w-28 h-28 bg-white/10 rounded-full blur-xl pointer-events-none" />
+            <div className="absolute -left-6 -top-6 w-20 h-20 bg-white/5 rounded-full blur-lg pointer-events-none" />
+            
+            <div className="relative z-10">
+              <h3 className="text-lg font-extrabold mb-3 leading-snug">Ragu Dengan Keaslian Informasi?</h3>
+              <p className="text-xs font-semibold leading-relaxed text-white/90 mb-6">
+                Hubungi kami jika Anda masih memiliki keraguan dalam berita yang bertebaran untuk dicek kevalidan hoaksnya oleh tim ahli kami.
+              </p>
+              <Link
+                href="https://wa.me/628111222333"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex w-full items-center justify-center rounded-xl bg-[#d6ef21] py-3 text-sm font-bold text-[#07877c] hover:bg-[#c9e21a] transition-all hover:scale-[1.02] shadow-sm"
+              >
+                Laporkan Isu / Cek Fakta
+              </Link>
+            </div>
+          </div>
         </aside>
       </section>
 

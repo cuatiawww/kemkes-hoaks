@@ -9,7 +9,8 @@ import {
   Phone,
   PlayCircle,
   Search,
-  ShieldCheck,
+  Heart,
+  Link2,
 } from 'lucide-react'
 import Link from 'next/link'
 
@@ -17,9 +18,9 @@ const navItems = [
   { label: 'Beranda', icon: Home, href: '/' },
   { label: 'Profil', icon: Info, href: '#' },
   { label: 'Informasi Publik', icon: CheckCircle2, href: '#' },
-  { label: 'Layanan', icon: ShieldCheck, href: '#' },
+  { label: 'Layanan', icon: Heart, href: '#' },
   { label: 'Media', icon: PlayCircle, href: '#' },
-  { label: 'Tautan', icon: CircleUserRound, href: '#' },
+  { label: 'Tautan', icon: Link2, href: '#' },
   { label: 'Kontak Kami', icon: Phone, href: '#' },
 ]
 
@@ -57,16 +58,18 @@ export default function SiteHeader() {
         </div>
       </div>
 
-      <nav className="bg-white border-b border-slate-100 shadow-sm">
-        <div className="mx-auto flex max-w-[1160px] items-center justify-between px-4 py-4">
+      <nav className="bg-[#f8f8f8] border-t-4 border-[#07877c] border-b border-slate-200">
+        <div className="mx-auto flex max-w-[1160px] items-center px-4 py-3">
           <div className="hidden w-full items-center justify-between lg:flex">
             {navItems.map((item) => (
               <Link
                 key={item.label}
                 href={item.href}
-                className="flex items-center gap-2 text-[13px] font-extrabold uppercase text-[#1d1d1d] transition hover:text-[#07877c]"
+                className="flex items-center gap-2 text-[12px] font-black uppercase text-slate-800 transition hover:text-[#07877c] tracking-wide"
               >
-                <item.icon className="h-4 w-4 fill-[#07877c] text-[#07877c]" />
+                <span className="flex h-5 w-5 items-center justify-center rounded-full bg-[#07877c] text-white p-1">
+                  <item.icon className="h-3.5 w-3.5" />
+                </span>
                 {item.label}
               </Link>
             ))}
