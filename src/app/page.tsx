@@ -43,8 +43,8 @@ function ArticleImage({ src, compact = false }: { src: string; compact?: boolean
         <img
           src="/watermark.png"
           alt="Hoaks Watermark"
-          className={`object-contain opacity-90 select-none ${
-            compact ? 'w-[100px] h-[100px]' : 'w-[180px] h-[180px]'
+          className={`object-contain opacity-95 select-none -rotate-12 transition-transform duration-300 ${
+            compact ? 'w-[130px] sm:w-[150px]' : 'w-[260px] sm:w-[320px]'
           }`}
         />
       </div>

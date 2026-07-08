@@ -46,7 +46,7 @@ function SidebarLatestSlider() {
         Hoaks Terbaru
       </h2>
       
-      <div className="relative h-[220px] w-full overflow-hidden rounded-2xl shadow-sm">
+      <div className="relative h-[220px] w-full overflow-hidden rounded-2xl shadow-sm group/slider">
         {items.map((item, idx) => (
           <Link
             key={item.slug}
@@ -64,7 +64,7 @@ function SidebarLatestSlider() {
                 <img
                   src="/watermark.png"
                   alt="Hoaks Watermark"
-                  className="object-contain opacity-90 select-none w-[140px] h-[140px]"
+                  className="object-contain opacity-95 select-none -rotate-12 w-[140px]"
                 />
               </div>
             </div>
@@ -81,36 +81,23 @@ function SidebarLatestSlider() {
             </div>
           </Link>
         ))}
-      </div>
 
-      <div className="flex items-center justify-between mt-4 px-1">
+        {/* Left Arrow Overlay */}
         <button
           onClick={handlePrev}
-          className="h-10 w-10 rounded-full border border-slate-300 flex items-center justify-center text-slate-500 bg-white hover:bg-slate-50 hover:text-slate-700 transition"
+          className="absolute left-3 top-1/2 -translate-y-1/2 z-20 h-8 w-8 rounded-full flex items-center justify-center text-slate-700 bg-white/90 hover:bg-white transition-all shadow-md hover:scale-105"
           aria-label="Previous slide"
         >
-          <ChevronLeft className="h-5 w-5" />
+          <ChevronLeft className="h-4.5 w-4.5" />
         </button>
 
-        <div className="flex gap-2">
-          {items.map((_, idx) => (
-            <button
-              key={idx}
-              onClick={() => setCurrentIndex(idx)}
-              className={`h-2 rounded-full transition-all duration-300 ${
-                currentIndex === idx ? 'w-5 bg-red-600' : 'w-2 bg-slate-300'
-              }`}
-              aria-label={`Go to slide ${idx + 1}`}
-            />
-          ))}
-        </div>
-
+        {/* Right Arrow Overlay */}
         <button
           onClick={handleNext}
-          className="h-10 w-10 rounded-full border border-slate-300 flex items-center justify-center text-slate-500 bg-white hover:bg-slate-50 hover:text-slate-700 transition"
+          className="absolute right-3 top-1/2 -translate-y-1/2 z-20 h-8 w-8 rounded-full flex items-center justify-center text-slate-700 bg-white/90 hover:bg-white transition-all shadow-md hover:scale-105"
           aria-label="Next slide"
         >
-          <ChevronRight className="h-5 w-5" />
+          <ChevronRight className="h-4.5 w-4.5" />
         </button>
       </div>
     </div>
@@ -120,22 +107,22 @@ function SidebarLatestSlider() {
 function HoaxImage({ src, small = false }: { src: string; small?: boolean }) {
   return (
     <div
-      className={`relative overflow-hidden bg-cover bg-center ${
+      className={`relative overflow-hidden bg-center ${
         small 
-          ? 'w-[100px] h-[64px] sm:w-[130px] sm:h-[84px] rounded-xl flex-shrink-0 shadow-sm border border-slate-200/50' 
-          : 'aspect-[16/10] w-full rounded-2xl shadow-sm border border-slate-200/50'
+          ? 'w-[100px] h-[64px] sm:w-[130px] sm:h-[84px] bg-cover rounded-xl flex-shrink-0 shadow-sm border border-slate-200/50' 
+          : 'aspect-[21/9] w-full bg-contain bg-no-repeat bg-white rounded-2xl shadow-sm border border-slate-200/50'
       }`}
       style={{ backgroundImage: `url("${encodeURI(src)}")` }}
       role="img"
       aria-label="Ilustrasi artikel hoaks kesehatan"
     >
-      <div className="absolute inset-0 bg-black/5" />
+      <div className="absolute inset-0 bg-black/5 pointer-events-none" />
       <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
         <img
           src="/watermark.png"
           alt="Hoaks Watermark"
-          className={`object-contain opacity-90 select-none ${
-            small ? 'w-[40px] h-[40px]' : 'w-[180px] h-[180px]'
+          className={`object-contain opacity-95 select-none -rotate-12 ${
+            small ? 'w-[85px] sm:w-[95px]' : 'w-[320px] sm:w-[420px] max-w-[85%]'
           }`}
         />
       </div>
