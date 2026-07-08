@@ -116,7 +116,7 @@ export default function HomeHero({
                           type="button"
                           onClick={() => {
                             setSearchInput(item.locale.id.title)
-                            setSearchQuery(item.locale.id.title)
+                            setSearchQuery?.(item.locale.id.title)
                             setShowSuggestions(false)
                             router.push(`/detail?slug=${item.slug}`)
                           }}

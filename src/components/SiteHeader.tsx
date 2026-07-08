@@ -28,7 +28,7 @@ export default function SiteHeader() {
   return (
     <header className="w-full">
       <div className="bg-[#07877c] text-white">
-        <div className="mx-auto flex h-[70px] max-w-[1160px] items-center justify-between px-4">
+        <div className="mx-auto flex w-full h-[70px] max-w-[1160px] items-center justify-between px-4">
           <Link href="/" className="flex items-center gap-2">
             <img
               src="/logo-kemkes.jpeg"
@@ -59,7 +59,7 @@ export default function SiteHeader() {
       </div>
 
       <nav className="bg-[#f8f8f8] border-t-4 border-[#07877c] border-b border-slate-200">
-        <div className="mx-auto flex max-w-[1160px] items-center px-4 py-3">
+        <div className="mx-auto flex w-full max-w-[1160px] items-center px-4 py-3">
           <div className="hidden w-full items-center justify-between lg:flex">
             {navItems.map((item) => (
               <Link

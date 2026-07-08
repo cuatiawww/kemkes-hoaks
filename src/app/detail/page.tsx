@@ -196,7 +196,7 @@ export default function DetailPage({ searchParams }: DetailPageProps) {
   return (
     <main className="min-h-screen bg-[#f4f4f4] text-[#4f4f4f]">
       <SiteHeader />
-      <div className="mt-6">
+      <div className="mt-4">
         <HomeHero searchInput={searchInput} setSearchInput={setSearchInput} />
       </div>
 
@@ -285,9 +285,12 @@ export default function DetailPage({ searchParams }: DetailPageProps) {
                 <div className="flex gap-4 items-start">
                   <HoaxImage src={item.image} small />
                   <div className="flex-1 min-w-0">
-                    <h3 className="mt-1.5 text-sm font-extrabold leading-snug text-slate-800 group-hover:text-[#07877c] transition-colors line-clamp-3">
+                    <h3 className="text-sm font-extrabold leading-snug text-slate-800 group-hover:text-[#07877c] transition-colors line-clamp-2">
                       {item.locale.id.title}
                     </h3>
+                    <p className="mt-1 text-xs text-slate-500 line-clamp-2 leading-relaxed">
+                      {item.locale.id.description}
+                    </p>
                   </div>
                 </div>
               </Link>

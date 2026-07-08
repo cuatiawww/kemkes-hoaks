@@ -194,7 +194,7 @@ export default function HomePage({ searchParams }: HomePageProps) {
       <SiteHeader />
 
       {/* Marquee Banner Section */}
-      <div className="mx-auto max-w-[1160px] px-4 mt-6">
+      <div className="mx-auto max-w-[1160px] px-4 mt-4">
         <div className="relative flex overflow-x-hidden border border-slate-200 rounded-lg bg-white h-10 items-center shadow-[0_1px_2px_rgba(0,0,0,0.02)]">
           <style>{`
             @keyframes marquee-scroll {
@@ -227,7 +227,7 @@ export default function HomePage({ searchParams }: HomePageProps) {
         </div>
       </div>
 
-      <div className="mt-6">
+      <div className="mt-4">
         <HomeHero
           searchInput={searchInput}
           setSearchInput={setSearchInput}
@@ -272,8 +272,12 @@ export default function HomePage({ searchParams }: HomePageProps) {
                     }`}
                   >
                     <span className="flex items-center gap-5">
-                      <span className={`flex h-8 w-8 items-center justify-center rounded-md text-white transition ${
-                        isSelected ? 'bg-[#07877c]' : 'bg-[#7ddbd4]'
+                      <span className={`flex h-8 w-8 items-center justify-center rounded-md transition ${
+                        hasResults
+                          ? isSelected
+                            ? 'bg-[#07877c] text-white'
+                            : 'bg-[#07877c]/15 text-[#07877c]'
+                          : 'bg-slate-100 text-slate-400'
                       }`}>
                         <category.icon className="h-5 w-5" />
                       </span>
@@ -284,10 +288,8 @@ export default function HomePage({ searchParams }: HomePageProps) {
                     <span className="flex items-center gap-2">
                       <span className={`text-base font-extrabold ${
                         hasResults 
-                          ? isSelected 
-                            ? 'text-[#07877c]' 
-                            : 'text-[#23bbb5]' 
-                          : 'text-red-500'
+                          ? 'text-[#07877c]' 
+                          : 'text-slate-400'
                       }`}>
                         ({category.count})
                       </span>
@@ -295,8 +297,8 @@ export default function HomePage({ searchParams }: HomePageProps) {
                         hasResults
                           ? isSelected
                             ? 'bg-[#07877c] rotate-90'
-                            : 'bg-[#07877c] rotate-0'
-                          : 'bg-gray-300'
+                            : 'bg-[#07877c]/20 text-[#07877c] rotate-0'
+                          : 'bg-slate-200 text-slate-400'
                       }`}>
                         <ChevronRight className="h-3.5 w-3.5" />
                       </span>
