@@ -41,7 +41,7 @@ function SidebarLatestSlider() {
 
   return (
     <div className="mt-10">
-      <h2 className="text-xl font-extrabold text-slate-800 flex items-center gap-2 mb-4">
+      <h2 className="text-xl font-bold text-slate-800 flex items-center gap-2 mb-4">
         <span className="w-1.5 h-6 bg-[#07877c] rounded-full" />
         Hoaks Terbaru
       </h2>
@@ -72,7 +72,7 @@ function SidebarLatestSlider() {
             <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/30 to-transparent" />
 
             <div className="absolute bottom-0 left-0 right-0 p-5 text-white">
-              <h3 className="text-base font-extrabold leading-snug line-clamp-2 hover:underline">
+              <h3 className="text-base font-bold leading-snug line-clamp-2 hover:underline">
                 {item.locale.id.title}
               </h3>
               <p className="mt-2 text-[11px] text-white/70 font-medium">
@@ -200,7 +200,7 @@ export default function DetailPage({ searchParams }: DetailPageProps) {
             <span className="text-slate-400">Detail Hoaks</span>
           </div>
 
-          <h1 className="max-w-[745px] text-3xl font-semibold leading-tight text-black md:text-[32px]">
+          <h1 className="max-w-[745px] text-3xl font-bold leading-tight text-black md:text-[32px]">
             {hoax.locale.id.title}
           </h1>
           <p className="mt-5 text-sm font-medium text-[#696969]">
@@ -222,7 +222,7 @@ export default function DetailPage({ searchParams }: DetailPageProps) {
 
           <div className="mt-12 pt-8 border-t border-[#cccccc] grid gap-8 md:grid-cols-2">
             <div>
-              <div className="flex items-center gap-2 mb-4 text-lg font-extrabold text-[#302e2e]">
+              <div className="flex items-center gap-2 mb-4 text-lg font-bold text-[#302e2e]">
                 <span>Kategori</span>
                 <span className="text-[#8d8d8d] font-semibold text-base ml-2">Health</span>
               </div>
@@ -239,7 +239,7 @@ export default function DetailPage({ searchParams }: DetailPageProps) {
             </div>
             
             <div>
-              <h4 className="text-lg font-extrabold text-[#302e2e] mb-4">
+              <h4 className="text-lg font-bold text-[#302e2e] mb-4">
                 Counter Fakta
               </h4>
               {hoax.counterFact ? (
@@ -259,7 +259,7 @@ export default function DetailPage({ searchParams }: DetailPageProps) {
         </article>
 
         <aside className="lg:pt-10">
-          <h2 className="text-xl font-extrabold text-slate-800 flex items-center gap-2">
+          <h2 className="text-xl font-bold text-slate-800 flex items-center gap-2">
             <span className="w-1.5 h-6 bg-[#07877c] rounded-full" />
             Hoaks Terkait
           </h2>
@@ -274,7 +274,7 @@ export default function DetailPage({ searchParams }: DetailPageProps) {
                 <div className="flex gap-4 items-start">
                   <HoaxImage src={item.image} small />
                   <div className="flex-1 min-w-0">
-                    <h3 className="text-sm font-extrabold leading-snug text-slate-800 group-hover:text-[#07877c] transition-colors line-clamp-2">
+                    <h3 className="text-sm font-bold leading-snug text-slate-800 group-hover:text-[#07877c] transition-colors line-clamp-2">
                       {item.locale.id.title}
                     </h3>
                     <p className="mt-1 text-xs text-slate-500 line-clamp-2 leading-relaxed">
@@ -300,7 +300,7 @@ export default function DetailPage({ searchParams }: DetailPageProps) {
             <div className="absolute -left-6 -top-6 w-20 h-20 bg-white/5 rounded-full blur-lg pointer-events-none" />
             
             <div className="relative z-10">
-              <h3 className="text-lg font-extrabold mb-3 leading-snug">Ragu Dengan Keaslian Informasi?</h3>
+              <h3 className="text-lg font-bold mb-3 leading-snug">Ragu Dengan Keaslian Informasi?</h3>
               <p className="text-xs font-semibold leading-relaxed text-white/90 mb-6">
                 Hubungi kami jika Anda masih memiliki keraguan dalam berita yang bertebaran untuk dicek kevalidan hoaksnya oleh tim ahli kami.
               </p>

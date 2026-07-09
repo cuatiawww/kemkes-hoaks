@@ -95,7 +95,7 @@ function LatestHoaxSlider() {
             <div key={article.slug} className="w-full md:w-1/2 flex-shrink-0 px-3">
               <Link href={`/detail?slug=${article.slug}`} className="group block">
                 <ArticleImage src={article.image} />
-                <h3 className="mt-8 text-lg font-extrabold leading-tight text-[#3b3b3b] transition group-hover:text-[#07877c] line-clamp-1">
+                <h3 className="mt-8 text-lg font-bold leading-tight text-[#3b3b3b] transition group-hover:text-[#07877c] line-clamp-1">
                   {article.locale.id.title}
                 </h3>
                 <p className="mt-1 text-sm font-medium text-[#8d8d8d]">
@@ -274,11 +274,11 @@ export default function HomePage({ searchParams }: HomePageProps) {
       </div>
 
       <section className="mx-auto max-w-[1160px] px-4 pb-28 pt-12">
-        <h2 className="text-2xl font-extrabold uppercase tracking-wide text-[#747474]">Hoaks Kesehatan Terbaru</h2>
+        <h2 className="text-2xl font-bold uppercase tracking-wide text-[#747474]">Hoaks Kesehatan Terbaru</h2>
         <div className="mt-6 h-px bg-[#d7d7d7]" />
         <LatestHoaxSlider />
 
-        <h2 className="mt-16 text-2xl font-extrabold uppercase tracking-wide text-[#747474]">
+        <h2 className="mt-16 text-2xl font-bold uppercase tracking-wide text-[#747474]">
           Hoaks Kesehatan Terpopuler
         </h2>
         {isFilterActive && (
@@ -374,7 +374,7 @@ export default function HomePage({ searchParams }: HomePageProps) {
                     <ArticleImage src={article.image} compact />
                     <div className="flex flex-col justify-between py-1 min-w-0">
                       <div>
-                        <h3 className="text-lg font-extrabold leading-snug text-slate-800 group-hover:text-[#07877c] transition-colors truncate">
+                        <h3 className="text-lg font-bold leading-snug text-slate-800 group-hover:text-[#07877c] transition-colors truncate">
                           {article.title}
                         </h3>
                         <p className="mt-2 line-clamp-2 text-sm font-medium text-slate-500 leading-relaxed">
@@ -389,7 +389,7 @@ export default function HomePage({ searchParams }: HomePageProps) {
                 ))
               ) : (
                 <div className="border border-slate-200 rounded-2xl p-12 text-center shadow-sm bg-white/40">
-                  <h3 className="text-xl font-extrabold text-[#747474] mb-2">Hasil tidak ditemukan</h3>
+                  <h3 className="text-xl font-bold text-[#747474] mb-2">Hasil tidak ditemukan</h3>
                   <p className="text-sm font-semibold text-[#9a9a9a]">
                     Coba kata kunci lain atau pilih kategori hoaks yang memiliki data.
                   </p>
