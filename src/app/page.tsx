@@ -39,7 +39,7 @@ function ArticleImage({ src, statusHoaks = true, compact = false }: { src: strin
       className={`relative overflow-hidden bg-cover bg-center bg-gradient-to-br from-slate-100 to-slate-200 ${
         compact
           ? 'h-40 sm:h-full w-full rounded-t-2xl sm:rounded-l-2xl sm:rounded-tr-none'
-          : 'aspect-[2/1] w-full rounded-t-2xl sm:rounded-2xl'
+          : 'max-w-[600px] aspect-[2/1] w-full mx-auto rounded-t-2xl sm:rounded-2xl'
       }`}
       style={{ backgroundImage: `url("${encodeURI(src)}")` }}
       role="img"
