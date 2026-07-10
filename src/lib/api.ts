@@ -1,6 +1,3 @@
-const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL || 'https://d3v-kemkes.mediaciptainformasi.co.id/web-api';
-const TTOKEN = process.env.NEXT_PUBLIC_API_TTOKEN || '';
-
 export interface KategoriItem {
   nama_kategori: string;
   slug: string;
@@ -60,12 +57,11 @@ export interface FetchArtikelParams {
 }
 
 export async function fetchArtikelHoaks(params: FetchArtikelParams = {}): Promise<ArtikelHoaksResponse> {
-  const url = `${BASE_URL}/content/artikel-hoaks`;
+  const url = `/api/hoaks/content/artikel-hoaks`;
   const res = await fetch(url, {
     method: 'POST',
     headers: {
-      'Content-Type': 'application/json',
-      'TTOKEN': TTOKEN
+      'Content-Type': 'application/json'
     },
     body: JSON.stringify({
       judul: params.judul || '',
@@ -85,12 +81,11 @@ export async function fetchArtikelHoaks(params: FetchArtikelParams = {}): Promis
 }
 
 export async function fetchDetailArtikel(slug: string, lang: string = 'id'): Promise<BaseApiResponse<ArtikelHoaksItem[]>> {
-  const url = `${BASE_URL}/content/detail-artikel`;
+  const url = `/api/hoaks/content/detail-artikel`;
   const res = await fetch(url, {
     method: 'POST',
     headers: {
-      'Content-Type': 'application/json',
-      'TTOKEN': TTOKEN
+      'Content-Type': 'application/json'
     },
     body: JSON.stringify({
       lang,
@@ -105,12 +100,11 @@ export async function fetchDetailArtikel(slug: string, lang: string = 'id'): Pro
 }
 
 export async function fetchKumpulanTag(lang: string = 'id'): Promise<BaseApiResponse<TagItem[]>> {
-  const url = `${BASE_URL}/content/kumpulan-tag`;
+  const url = `/api/hoaks/content/kumpulan-tag`;
   const res = await fetch(url, {
     method: 'POST',
     headers: {
-      'Content-Type': 'application/json',
-      'TTOKEN': TTOKEN
+      'Content-Type': 'application/json'
     },
     body: JSON.stringify({ lang })
   });
@@ -122,12 +116,9 @@ export async function fetchKumpulanTag(lang: string = 'id'): Promise<BaseApiResp
 }
 
 export async function fetchKategori(): Promise<BaseApiResponse<KategoriItem[]>> {
-  const url = `${BASE_URL}/content/kategori`;
+  const url = `/api/hoaks/content/kategori`;
   const res = await fetch(url, {
-    method: 'GET',
-    headers: {
-      'TTOKEN': TTOKEN
-    }
+    method: 'GET'
   });
 
   if (!res.ok) {
