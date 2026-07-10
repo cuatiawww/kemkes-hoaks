@@ -165,6 +165,7 @@ export default function HomePage({ searchParams }: HomePageProps) {
   const [categories, setCategories] = useState<{ label: string; count: number; icon: any }[]>([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
+  const [totalHoaxes, setTotalHoaxes] = useState<number>(1241)
 
   // Update query if URL searchParams change
   useEffect(() => {
@@ -187,6 +188,7 @@ export default function HomePage({ searchParams }: HomePageProps) {
 
         const articlesList = articlesRes.data || []
         setArticles(articlesList)
+        setTotalHoaxes(articlesRes.total_data || articlesList.length || 1241)
 
         const apiCategories = categoriesRes.data || []
         const mappedCategories = apiCategories.map((cat) => {
@@ -360,6 +362,7 @@ export default function HomePage({ searchParams }: HomePageProps) {
           searchInput={searchInput}
           setSearchInput={setSearchInput}
           setSearchQuery={setSearchQuery}
+          totalCount={totalHoaxes}
         />
       </div>
 

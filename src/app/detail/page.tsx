@@ -206,6 +206,7 @@ export default function DetailPage({ searchParams }: DetailPageProps) {
   const [latest, setLatest] = useState<ArtikelHoaksItem[]>([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
+  const [totalHoaxes, setTotalHoaxes] = useState<number>(1241)
 
   useEffect(() => {
     if (!slug) return
@@ -224,6 +225,7 @@ export default function DetailPage({ searchParams }: DetailPageProps) {
           // 2. Fetch related and latest lists in parallel
           const listRes = await fetchArtikelHoaks({ per_page: '10', page: '1', lang: 'id' })
           const allItems = listRes.data || []
+          setTotalHoaxes(listRes.total_data || allItems.length || 1241)
 
           setRelated(allItems.filter((item) => item.slug !== hoaxItem.slug).slice(0, 3))
           setLatest(allItems.filter((item) => item.slug !== hoaxItem.slug || isWithin10Days(item.publish_date)).slice(0, 4))
@@ -280,7 +282,7 @@ export default function DetailPage({ searchParams }: DetailPageProps) {
     <main className="min-h-screen bg-[#f4f4f4] text-[#4f4f4f]">
       <SiteHeader />
       <div className="mt-4">
-        <HomeHero searchInput={searchInput} setSearchInput={setSearchInput} />
+        <HomeHero searchInput={searchInput} setSearchInput={setSearchInput} totalCount={totalHoaxes} />
       </div>
 
       <section className="mx-auto grid max-w-[1160px] gap-12 px-4 pt-10 lg:grid-cols-[1fr_390px] pb-28">

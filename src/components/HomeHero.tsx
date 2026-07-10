@@ -13,12 +13,14 @@ interface HomeHeroProps {
   searchInput: string
   setSearchInput: (value: string) => void
   setSearchQuery?: (value: string) => void
+  totalCount?: number
 }
 
 export default function HomeHero({
   searchInput,
   setSearchInput,
   setSearchQuery,
+  totalCount = 1241,
 }: HomeHeroProps) {
   const router = useRouter()
   const searchRef = useRef<HTMLDivElement>(null)
@@ -96,7 +98,7 @@ export default function HomeHero({
         {/* Content Container (no overflow-hidden, so suggestions can float outside) */}
         <div className="relative z-10 mx-auto flex min-h-[360px] max-w-[920px] flex-col items-center justify-center px-5 py-12 text-center text-white">
           <h1 className="text-3xl font-bold tracking-tight sm:text-4xl md:text-[42px]">
-            Telusuri 1.241 Isu Hoaks Kesehatan
+            Telusuri {totalCount.toLocaleString('id-ID')} Isu Hoaks Kesehatan
           </h1>
           <p className="mt-3 max-w-lg text-base font-medium leading-snug text-white/95">
             Cari dan temukan berbagai isu hoaks disini, jangan sampai termakan Hoaks!
