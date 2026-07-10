@@ -23,7 +23,13 @@ import {
 } from 'lucide-react'
 import Link from 'next/link'
 
-import hoaksData from '@/data/hoaks.json'
+import {
+  fetchArtikelHoaks,
+  fetchKategori,
+  ArtikelHoaksItem,
+  formatDate,
+  stripHtmlAndTruncate
+} from '@/lib/api'
 import SiteHeader from '@/components/SiteHeader'
 import HomeHero from '@/components/HomeHero'
 
@@ -53,10 +59,9 @@ function ArticleImage({ src, compact = false }: { src: string; compact?: boolean
   )
 }
 
-function LatestHoaxSlider() {
+function LatestHoaxSlider({ items }: { items: ArtikelHoaksItem[] }) {
   const [currentIndex, setCurrentIndex] = useState(0)
   const [isDesktop, setIsDesktop] = useState(false)
-  const items = hoaksData.slice(0, 6)
 
   useEffect(() => {
     const checkIsDesktop = () => {
@@ -68,10 +73,11 @@ function LatestHoaxSlider() {
   }, [])
 
   useEffect(() => {
+    if (items.length === 0) return
     const timer = setInterval(() => {
       setCurrentIndex((prev) => {
         const maxIndex = isDesktop ? items.length - 2 : items.length - 1
-        if (prev >= maxIndex) {
+        if (prev >= maxIndex || maxIndex <= 0) {
           return 0
         }
         return prev + 1
@@ -79,6 +85,8 @@ function LatestHoaxSlider() {
     }, 3500)
     return () => clearInterval(timer)
   }, [isDesktop, items.length])
+
+  if (items.length === 0) return null
 
   return (
     <div className="relative w-full overflow-hidden py-4">
@@ -96,10 +104,10 @@ function LatestHoaxSlider() {
               <Link href={`/detail?slug=${article.slug}`} className="group block">
                 <ArticleImage src={article.image} />
                 <h3 className="mt-8 text-lg font-bold leading-tight text-[#3b3b3b] transition group-hover:text-[#07877c] line-clamp-1">
-                  {article.locale.id.title}
+                  {article.judul}
                 </h3>
                 <p className="mt-1 text-sm font-medium text-[#8d8d8d]">
-                  {article.locale.id.date} <span className="px-2">•</span> Waktu Baca 3 Menit
+                  {formatDate(article.publish_date, 'id')} <span className="px-2">•</span> Waktu Baca 3 Menit
                 </p>
                 <div className="mt-4 h-px bg-[#d7d7d7]" />
               </Link>
@@ -109,7 +117,7 @@ function LatestHoaxSlider() {
       </div>
 
       <div className="flex justify-center gap-2 mt-6">
-        {Array.from({ length: isDesktop ? items.length - 1 : items.length }).map((_, idx) => (
+        {Array.from({ length: isDesktop ? Math.max(items.length - 1, 1) : items.length }).map((_, idx) => (
           <button
             key={idx}
             onClick={() => setCurrentIndex(idx)}
@@ -124,9 +132,24 @@ function LatestHoaxSlider() {
   )
 }
 
-
 interface HomePageProps {
   searchParams: Promise<{ q?: string }>
+}
+
+const iconMap: Record<string, any> = {
+  'vaksinasi': UsersRound,
+  'obat-obatan': Stethoscope,
+  'pengobatan': ShieldCheck,
+  'kedokteran': FileText,
+  'kegiatan': CalendarDays,
+  'artikel-berita': Newspaper,
+}
+
+function toTitleCase(str: string): string {
+  return str.replace(
+    /\w\S*/g,
+    (txt) => txt.charAt(0).toUpperCase() + txt.substring(1).toLowerCase()
+  )
 }
 
 export default function HomePage({ searchParams }: HomePageProps) {
@@ -138,52 +161,83 @@ export default function HomePage({ searchParams }: HomePageProps) {
   const [searchQuery, setSearchQuery] = useState(initialQuery)
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null)
 
+  const [articles, setArticles] = useState<ArtikelHoaksItem[]>([])
+  const [categories, setCategories] = useState<{ label: string; count: number; icon: any }[]>([])
+  const [loading, setLoading] = useState(true)
+  const [error, setError] = useState<string | null>(null)
+
   // Update query if URL searchParams change
   useEffect(() => {
     setSearchInput(initialQuery)
     setSearchQuery(initialQuery)
   }, [initialQuery])
 
-  // Dynamic category calculations
-  const categories = [
-    { label: 'Vaksinasi', count: hoaksData.filter((item) => item.category === 'Vaksinasi').length, icon: UsersRound },
-    { label: 'Obat-obatan', count: hoaksData.filter((item) => item.category === 'Obat-obatan').length, icon: Stethoscope },
-    { label: 'Pengobatan', count: hoaksData.filter((item) => item.category === 'Pengobatan').length, icon: ShieldCheck },
-    { label: 'Kedokteran', count: hoaksData.filter((item) => item.category === 'Kedokteran').length, icon: FileText },
-    { label: 'Kegiatan', count: hoaksData.filter((item) => item.category === 'Kegiatan').length, icon: CalendarDays },
-    { label: 'Artikel Berita', count: hoaksData.filter((item) => item.category === 'Artikel Berita').length, icon: Newspaper },
-  ]
+  // Load API Data
+  useEffect(() => {
+    async function loadData() {
+      try {
+        setLoading(true)
+        setError(null)
 
+        // Fetch articles and categories
+        const [articlesRes, categoriesRes] = await Promise.all([
+          fetchArtikelHoaks({ per_page: '100', page: '1', lang: 'id' }),
+          fetchKategori()
+        ])
 
+        const articlesList = articlesRes.data || []
+        setArticles(articlesList)
+
+        const apiCategories = categoriesRes.data || []
+        const mappedCategories = apiCategories.map((cat) => {
+          const slug = cat.slug.toLowerCase()
+          const count = articlesList.filter(
+            (art) => art.kategori?.slug?.toLowerCase() === slug
+          ).length
+
+          return {
+            label: toTitleCase(cat.nama_kategori),
+            count: count,
+            icon: iconMap[slug] || ShieldCheck,
+          }
+        })
+
+        setCategories(mappedCategories)
+      } catch (err: any) {
+        console.error(err)
+        setError('Gagal mengambil data dari server. Pastikan API lokal/dev Anda aktif.')
+      } finally {
+        setLoading(false)
+      }
+    }
+
+    loadData()
+  }, [])
 
   // Filter hoaxes for display
-  const filteredHoaxes = hoaksData.filter((item) => {
-    const matchesCategory = !selectedCategory || item.category === selectedCategory
+  const filteredHoaxes = articles.filter((item) => {
+    const matchesCategory =
+      !selectedCategory ||
+      item.kategori?.nama?.toLowerCase() === selectedCategory.toLowerCase()
+
     const matchesSearch =
       !searchQuery ||
-      item.locale.id.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      item.locale.id.description.toLowerCase().includes(searchQuery.toLowerCase())
+      item.judul.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      item.isi.toLowerCase().includes(searchQuery.toLowerCase())
+
     return matchesCategory && matchesSearch
   })
 
   const isFilterActive = !!selectedCategory || !!searchQuery
 
-
-  const displayPopular = isFilterActive
-    ? filteredHoaxes.map((item) => ({
-        title: item.locale.id.title,
-        image: item.image,
-        slug: item.slug,
-        date: item.locale.id.date,
-        description: item.locale.id.description,
-      }))
-    : hoaksData.slice(2).map((item) => ({
-        title: item.locale.id.title,
-        image: item.image,
-        slug: item.slug,
-        date: item.locale.id.date,
-        description: item.locale.id.description,
-      }))
+  const displayPopular = filteredHoaxes.map((item) => ({
+    title: item.judul,
+    image: item.image,
+    slug: item.slug,
+    date: formatDate(item.publish_date, 'id'),
+    description: stripHtmlAndTruncate(item.isi, 180),
+    visitor: item.visitor,
+  }))
 
   const [currentPage, setCurrentPage] = useState(1)
   const ITEMS_PER_PAGE = 4
@@ -218,6 +272,41 @@ export default function HomePage({ searchParams }: HomePageProps) {
       pages.push(i)
     }
     return pages
+  }
+
+  if (loading) {
+    return (
+      <main className="min-h-screen bg-[#f4f4f4] text-[#4f4f4f] flex flex-col">
+        <SiteHeader />
+        <div className="flex-1 flex flex-col items-center justify-center py-32">
+          <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-[#07877c]"></div>
+          <p className="mt-4 text-sm font-semibold text-slate-500">Memuat data hoaks kesehatan...</p>
+        </div>
+      </main>
+    )
+  }
+
+  if (error) {
+    return (
+      <main className="min-h-screen bg-[#f4f4f4] text-[#4f4f4f] flex flex-col">
+        <SiteHeader />
+        <div className="flex-1 flex flex-col items-center justify-center py-20 px-4 text-center">
+          <div className="bg-white border border-slate-200 rounded-2xl p-8 max-w-md shadow-sm">
+            <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-red-100 text-red-600 mb-4">
+              <ShieldCheck className="h-6 w-6" />
+            </div>
+            <h3 className="text-lg font-bold text-slate-800 mb-2">Terjadi Kesalahan</h3>
+            <p className="text-sm text-slate-500 mb-6 leading-relaxed">{error}</p>
+            <button
+              onClick={() => window.location.reload()}
+              className="h-10 px-6 rounded-full bg-[#07877c] hover:bg-[#056058] text-white text-sm font-bold transition-all shadow-md"
+            >
+              Coba Lagi
+            </button>
+          </div>
+        </div>
+      </main>
+    )
   }
 
   return (
@@ -276,7 +365,7 @@ export default function HomePage({ searchParams }: HomePageProps) {
       <section className="mx-auto max-w-[1160px] px-4 pb-28 pt-12">
         <h2 className="text-2xl font-bold uppercase tracking-wide text-[#747474]">Hoaks Kesehatan Terbaru</h2>
         <div className="mt-6 h-px bg-[#d7d7d7]" />
-        <LatestHoaxSlider />
+        <LatestHoaxSlider items={articles.slice(0, 6)} />
 
         <h2 className="mt-16 text-2xl font-bold uppercase tracking-wide text-[#747474]">
           Hoaks Kesehatan Terpopuler
@@ -382,7 +471,7 @@ export default function HomePage({ searchParams }: HomePageProps) {
                         </p>
                       </div>
                       <p className="mt-3 text-xs font-semibold text-slate-400">
-                        {article.date} <span className="px-3">•</span> Dilihat 708 Kali <span className="px-3">•</span> Waktu Baca 3 Menit
+                        {article.date} <span className="px-3">•</span> Dilihat {article.visitor || 0} Kali <span className="px-3">•</span> Waktu Baca 3 Menit
                       </p>
                     </div>
                   </Link>

@@ -1,30 +1,31 @@
 'use client'
 
-import { use, useState, useEffect, useRef } from 'react'
-import { useRouter } from 'next/navigation'
+import { use, useState, useEffect } from 'react'
 import {
-  CheckCircle2,
   ChevronLeft,
   ChevronRight,
   CircleUserRound,
   Home,
   Info,
   Languages,
-  Menu,
-  Phone,
   PlayCircle,
-  Search,
 } from 'lucide-react'
 import Link from 'next/link'
-import hoaksData from '@/data/hoaks.json'
+import {
+  fetchDetailArtikel,
+  fetchArtikelHoaks,
+  ArtikelHoaksItem,
+  formatDate,
+  stripHtmlAndTruncate,
+} from '@/lib/api'
 import SiteHeader from '@/components/SiteHeader'
 import HomeHero from '@/components/HomeHero'
 
-function SidebarLatestSlider() {
+function SidebarLatestSlider({ items }: { items: ArtikelHoaksItem[] }) {
   const [currentIndex, setCurrentIndex] = useState(0)
-  const items = hoaksData.slice(0, 4)
 
   useEffect(() => {
+    if (items.length === 0) return
     const timer = setInterval(() => {
       setCurrentIndex((prev) => (prev + 1) % items.length)
     }, 4000)
@@ -32,12 +33,16 @@ function SidebarLatestSlider() {
   }, [items.length])
 
   const handlePrev = () => {
+    if (items.length === 0) return
     setCurrentIndex((prev) => (prev - 1 + items.length) % items.length)
   }
 
   const handleNext = () => {
+    if (items.length === 0) return
     setCurrentIndex((prev) => (prev + 1) % items.length)
   }
+
+  if (items.length === 0) return null
 
   return (
     <div className="mt-10">
@@ -73,10 +78,10 @@ function SidebarLatestSlider() {
 
             <div className="absolute bottom-0 left-0 right-0 p-5 text-white">
               <h3 className="text-base font-bold leading-snug line-clamp-2 hover:underline">
-                {item.locale.id.title}
+                {item.judul}
               </h3>
               <p className="mt-2 text-[11px] text-white/70 font-medium">
-                {item.locale.id.date} &bull; Waktu Baca 3 Menit
+                {formatDate(item.publish_date, 'id')} &bull; Waktu Baca 3 Menit
               </p>
             </div>
           </Link>
@@ -170,17 +175,92 @@ interface DetailPageProps {
   searchParams: Promise<{ slug?: string }>
 }
 
+function toTitleCase(str: string): string {
+  return str.replace(
+    /\w\S*/g,
+    (txt) => txt.charAt(0).toUpperCase() + txt.substring(1).toLowerCase()
+  )
+}
+
 export default function DetailPage({ searchParams }: DetailPageProps) {
   const resolvedParams = use(searchParams)
   const slug = resolvedParams?.slug || ''
   const [searchInput, setSearchInput] = useState('')
 
-  const hoax =
-    hoaksData.find((item) => item.slug === slug) ||
-    hoaksData.find((item) => item.slug === 'hoaks-virus-marburg-dapat-diaktifkan-melalui-5g') ||
-    hoaksData[0]
+  const [hoax, setHoax] = useState<ArtikelHoaksItem | null>(null)
+  const [related, setRelated] = useState<ArtikelHoaksItem[]>([])
+  const [latest, setLatest] = useState<ArtikelHoaksItem[]>([])
+  const [loading, setLoading] = useState(true)
+  const [error, setError] = useState<string | null>(null)
 
-  const related = hoaksData.filter((item) => item.slug !== hoax.slug).slice(0, 3)
+  useEffect(() => {
+    if (!slug) return
+
+    async function loadDetail() {
+      try {
+        setLoading(true)
+        setError(null)
+
+        // 1. Fetch details
+        const detailRes = await fetchDetailArtikel(slug, 'id')
+        if (detailRes.sukses && detailRes.data && detailRes.data.length > 0) {
+          const hoaxItem = detailRes.data[0]
+          setHoax(hoaxItem)
+
+          // 2. Fetch related and latest lists in parallel
+          const listRes = await fetchArtikelHoaks({ per_page: '10', page: '1', lang: 'id' })
+          const allItems = listRes.data || []
+
+          setRelated(allItems.filter((item) => item.slug !== hoaxItem.slug).slice(0, 3))
+          setLatest(allItems.slice(0, 4))
+        } else {
+          setError('Detail artikel hoaks tidak ditemukan.')
+        }
+      } catch (err: any) {
+        console.error(err)
+        setError('Gagal memuat detail artikel hoaks. Pastikan API Anda aktif.')
+      } finally {
+        setLoading(false)
+      }
+    }
+
+    loadDetail()
+  }, [slug])
+
+  if (loading) {
+    return (
+      <main className="min-h-screen bg-[#f4f4f4] text-[#4f4f4f] flex flex-col">
+        <SiteHeader />
+        <div className="flex-1 flex flex-col items-center justify-center py-32">
+          <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-[#07877c]"></div>
+          <p className="mt-4 text-sm font-semibold text-slate-500">Memuat detail hoaks...</p>
+        </div>
+      </main>
+    )
+  }
+
+  if (error || !hoax) {
+    return (
+      <main className="min-h-screen bg-[#f4f4f4] text-[#4f4f4f] flex flex-col">
+        <SiteHeader />
+        <div className="flex-1 flex flex-col items-center justify-center py-20 px-4 text-center">
+          <div className="bg-white border border-slate-200 rounded-2xl p-8 max-w-md shadow-sm">
+            <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-red-100 text-red-600 mb-4">
+              <Info className="h-6 w-6" />
+            </div>
+            <h3 className="text-lg font-bold text-slate-800 mb-2">Terjadi Kesalahan</h3>
+            <p className="text-sm text-slate-500 mb-6 leading-relaxed">{error || 'Artikel tidak ditemukan.'}</p>
+            <Link
+              href="/"
+              className="h-10 px-6 inline-flex items-center justify-center rounded-full bg-[#07877c] hover:bg-[#056058] text-white text-sm font-bold transition-all shadow-md"
+            >
+              Kembali ke Beranda
+            </Link>
+          </div>
+        </div>
+      </main>
+    )
+  }
 
   return (
     <main className="min-h-screen bg-[#f4f4f4] text-[#4f4f4f]">
@@ -201,10 +281,10 @@ export default function DetailPage({ searchParams }: DetailPageProps) {
           </div>
 
           <h1 className="max-w-[745px] text-3xl font-bold leading-tight text-black md:text-[32px]">
-            {hoax.locale.id.title}
+            {hoax.judul}
           </h1>
           <p className="mt-5 text-sm font-medium text-[#696969]">
-            {hoax.locale.id.date} <span className="px-3">&bull;</span> Waktu Baca 3 Menit
+            {formatDate(hoax.publish_date, 'id')} <span className="px-3">&bull;</span> Waktu Baca 3 Menit
           </p>
 
           <div className="mt-6 max-w-[745px]">
@@ -213,21 +293,22 @@ export default function DetailPage({ searchParams }: DetailPageProps) {
 
           <div className="border-l-4 border-[#07877c] pl-6 mt-8 max-w-[727px] text-lg leading-8 text-[#525252]">
             <h2 className="mb-4 text-2xl font-bold text-black">Penjelasan</h2>
-            {hoax.locale.id.explanation.split('\n\n').map((paragraph, index) => (
-              <p key={index} className={`text-justify ${index > 0 ? 'mt-4' : ''}`}>
-                {paragraph}
-              </p>
-            ))}
+            <div 
+              className="text-justify space-y-4"
+              dangerouslySetInnerHTML={{ __html: hoax.isi }}
+            />
           </div>
 
           <div className="mt-12 pt-8 border-t border-[#cccccc] grid gap-8 md:grid-cols-2">
             <div>
               <div className="flex items-center gap-2 mb-4 text-lg font-bold text-[#302e2e]">
                 <span>Kategori</span>
-                <span className="text-[#8d8d8d] font-semibold text-base ml-2">Health</span>
+                <span className="text-[#8d8d8d] font-semibold text-base ml-2">
+                  {hoax.kategori?.nama ? toTitleCase(hoax.kategori.nama) : 'Kesehatan'}
+                </span>
               </div>
               <div className="flex flex-wrap gap-2">
-                {hoax.tags?.map((tag) => (
+                {hoax.tag?.map((tag) => (
                   <span
                     key={tag}
                     className="px-3 py-1 bg-white text-slate-700 text-sm rounded border border-slate-300 font-medium"
@@ -242,15 +323,20 @@ export default function DetailPage({ searchParams }: DetailPageProps) {
               <h4 className="text-lg font-bold text-[#302e2e] mb-4">
                 Counter Fakta
               </h4>
-              {hoax.counterFact ? (
-                <a
-                  href={hoax.counterFact}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="text-blue-600 hover:text-blue-800 hover:underline text-sm font-semibold break-all leading-relaxed"
-                >
-                  {hoax.counterFact}
-                </a>
+              {hoax.counter_fact && hoax.counter_fact.length > 0 ? (
+                <div className="flex flex-col gap-2">
+                  {hoax.counter_fact.map((url, idx) => (
+                    <a
+                      key={idx}
+                      href={url}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-blue-600 hover:text-blue-800 hover:underline text-sm font-semibold break-all leading-relaxed"
+                    >
+                      {url}
+                    </a>
+                  ))}
+                </div>
               ) : (
                 <span className="text-sm text-slate-500 italic">Tidak tersedia</span>
               )}
@@ -267,7 +353,7 @@ export default function DetailPage({ searchParams }: DetailPageProps) {
           <div className="space-y-6 pt-6">
             {related.map((item) => (
               <Link
-                key={item.locale.id.title}
+                key={item.slug}
                 href={`/detail?slug=${item.slug}`}
                 className="group block border-b border-slate-200 pb-5 last:border-0 last:pb-0 transition-all duration-300 hover:translate-x-1"
               >
@@ -275,10 +361,10 @@ export default function DetailPage({ searchParams }: DetailPageProps) {
                   <HoaxImage src={item.image} small />
                   <div className="flex-1 min-w-0">
                     <h3 className="text-sm font-bold leading-snug text-slate-800 group-hover:text-[#07877c] transition-colors line-clamp-2">
-                      {item.locale.id.title}
+                      {item.judul}
                     </h3>
                     <p className="mt-1 text-xs text-slate-500 line-clamp-2 leading-relaxed">
-                      {item.locale.id.description}
+                      {stripHtmlAndTruncate(item.isi, 120)}
                     </p>
                   </div>
                 </div>
@@ -293,7 +379,7 @@ export default function DetailPage({ searchParams }: DetailPageProps) {
             <ChevronRight className="h-4 w-4" />
           </Link>
 
-          <SidebarLatestSlider />
+          <SidebarLatestSlider items={latest} />
 
           <div className="mt-10 bg-gradient-to-br from-[#07877c] to-[#056058] rounded-2xl p-6 text-white shadow-sm relative overflow-hidden">
             <div className="absolute -right-8 -bottom-8 w-28 h-28 bg-white/10 rounded-full blur-xl pointer-events-none" />

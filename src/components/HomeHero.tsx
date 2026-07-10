@@ -4,7 +4,7 @@ import { useState, useRef, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import { Search } from 'lucide-react'
 import Link from 'next/link'
-import hoaksData from '@/data/hoaks.json'
+import { fetchArtikelHoaks, ArtikelHoaksItem } from '@/lib/api'
 
 const heroImage =
   'https://images.unsplash.com/photo-1585829365295-ab7cd400c167?auto=format&fit=crop&w=1800&q=80'
@@ -23,6 +23,31 @@ export default function HomeHero({
   const router = useRouter()
   const searchRef = useRef<HTMLDivElement>(null)
   const [showSuggestions, setShowSuggestions] = useState(false)
+  const [suggestions, setSuggestions] = useState<ArtikelHoaksItem[]>([])
+
+  // Fetch debounced search suggestions
+  useEffect(() => {
+    if (searchInput.trim().length < 2) {
+      setSuggestions([])
+      return
+    }
+
+    const delayDebounceFn = setTimeout(async () => {
+      try {
+        const res = await fetchArtikelHoaks({
+          judul: searchInput.trim(),
+          per_page: '5',
+          page: '1',
+          lang: 'id'
+        })
+        setSuggestions(res.data || [])
+      } catch (err) {
+        console.error('Gagal mengambil saran pencarian:', err)
+      }
+    }, 300)
+
+    return () => clearTimeout(delayDebounceFn)
+  }, [searchInput])
 
   // Click outside to close suggestions
   useEffect(() => {
@@ -56,15 +81,6 @@ export default function HomeHero({
     }
     setShowSuggestions(false)
   }
-
-  const suggestions =
-    searchInput.trim().length >= 2
-      ? hoaksData
-          .filter((item) =>
-            item.locale.id.title.toLowerCase().includes(searchInput.toLowerCase())
-          )
-          .slice(0, 5)
-      : []
 
   return (
     <section className="mx-auto max-w-[1160px] px-4">
@@ -116,11 +132,11 @@ export default function HomeHero({
                   {suggestions.length > 0 ? (
                     suggestions.map((item) => (
                       <button
-                        key={item.id}
+                        key={item.slug}
                         type="button"
                         onClick={() => {
-                          setSearchInput(item.locale.id.title)
-                          setSearchQuery?.(item.locale.id.title)
+                          setSearchInput(item.judul)
+                          setSearchQuery?.(item.judul)
                           setShowSuggestions(false)
                           router.push(`/detail?slug=${item.slug}`)
                         }}
@@ -130,9 +146,9 @@ export default function HomeHero({
                           <Search className="w-4 h-4 text-slate-400 group-hover:text-[#07877c] flex-shrink-0" />
                           <div className="min-w-0 flex-1">
                             <p className="text-sm font-semibold text-slate-900 group-hover:text-[#07877c] truncate">
-                              {item.locale.id.title}
+                              {item.judul}
                             </p>
-                            <p className="text-xs text-slate-500 mt-0.5">{item.category}</p>
+                            <p className="text-xs text-slate-500 mt-0.5">{item.kategori?.nama || ''}</p>
                           </div>
                         </div>
                         <span className="text-[10px] bg-slate-100 text-slate-600 px-2 py-0.5 rounded-full font-bold flex-shrink-0">
