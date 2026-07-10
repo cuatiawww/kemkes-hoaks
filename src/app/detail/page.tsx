@@ -50,15 +50,14 @@ function SidebarLatestSlider({ items }: { items: ArtikelHoaksItem[] }) {
         <span className="w-1.5 h-6 bg-[#07877c] rounded-full" />
         Hoaks Terbaru
       </h2>
-      
+
       <div className="relative h-[220px] w-full overflow-hidden rounded-2xl shadow-sm group/slider">
         {items.map((item, idx) => (
           <Link
             key={item.slug}
             href={`/detail?slug=${item.slug}`}
-            className={`absolute inset-0 block transition-opacity duration-700 ease-in-out ${
-              idx === currentIndex ? 'opacity-100 z-10 pointer-events-auto' : 'opacity-0 z-0 pointer-events-none'
-            }`}
+            className={`absolute inset-0 block transition-opacity duration-700 ease-in-out ${idx === currentIndex ? 'opacity-100 z-10 pointer-events-auto' : 'opacity-0 z-0 pointer-events-none'
+              }`}
           >
             <div
               className="absolute inset-0 bg-cover bg-center bg-gradient-to-br from-slate-100 to-slate-200"
@@ -112,11 +111,10 @@ function SidebarLatestSlider({ items }: { items: ArtikelHoaksItem[] }) {
 function HoaxImage({ src, statusHoaks = true, small = false }: { src: string; statusHoaks?: boolean; small?: boolean }) {
   return (
     <div
-      className={`relative overflow-hidden bg-center bg-gradient-to-br from-slate-100 to-slate-200 ${
-        small 
-          ? 'w-[100px] h-[64px] sm:w-[130px] sm:h-[84px] bg-cover rounded-xl flex-shrink-0 shadow-sm border border-slate-200/50' 
+      className={`relative overflow-hidden bg-center bg-gradient-to-br from-slate-100 to-slate-200 ${small
+          ? 'w-[100px] h-[64px] sm:w-[130px] sm:h-[84px] bg-cover rounded-xl flex-shrink-0 shadow-sm border border-slate-200/50'
           : 'aspect-[21/9] w-full bg-contain bg-no-repeat rounded-2xl shadow-sm border border-slate-200/50'
-      }`}
+        }`}
       style={{ backgroundImage: `url("${encodeURI(src)}")` }}
       role="img"
       aria-label="Ilustrasi artikel hoaks kesehatan"
@@ -126,9 +124,8 @@ function HoaxImage({ src, statusHoaks = true, small = false }: { src: string; st
         <img
           src={statusHoaks ? "/watermark.png" : "/watermark2.png"}
           alt="Status Watermark"
-          className={`object-contain opacity-95 select-none -rotate-12 ${
-            small ? 'w-[85px] sm:w-[95px]' : 'w-[320px] sm:w-[420px] max-w-[85%]'
-          }`}
+          className={`object-contain opacity-95 select-none -rotate-12 ${small ? 'w-[85px] sm:w-[95px]' : 'w-[320px] sm:w-[420px] max-w-[85%]'
+            }`}
         />
       </div>
     </div>
@@ -308,8 +305,7 @@ export default function DetailPage({ searchParams }: DetailPageProps) {
           </div>
 
           <div className="border-l-4 border-[#07877c] pl-6 mt-8 max-w-[727px] text-lg leading-8 text-[#525252]">
-            <h2 className="mb-4 text-2xl font-bold text-black">Penjelasan</h2>
-            <div 
+            <div
               className="text-justify space-y-4"
               dangerouslySetInnerHTML={{ __html: hoax.isi }}
             />
@@ -334,7 +330,7 @@ export default function DetailPage({ searchParams }: DetailPageProps) {
                 ))}
               </div>
             </div>
-            
+
             <div>
               <h4 className="text-lg font-bold text-[#302e2e] mb-4">
                 Counter Fakta
@@ -367,7 +363,7 @@ export default function DetailPage({ searchParams }: DetailPageProps) {
               Hoaks Terkait
             </h2>
             <div className="mt-4 h-px bg-slate-200" />
-            
+
             {related.length > 0 ? (
               <div className="space-y-6 pt-6">
                 {related.map((item) => (
@@ -410,7 +406,7 @@ export default function DetailPage({ searchParams }: DetailPageProps) {
           <div className="mt-10 bg-gradient-to-br from-[#07877c] to-[#056058] rounded-2xl p-6 text-white shadow-sm relative overflow-hidden">
             <div className="absolute -right-8 -bottom-8 w-28 h-28 bg-white/10 rounded-full blur-xl pointer-events-none" />
             <div className="absolute -left-6 -top-6 w-20 h-20 bg-white/5 rounded-full blur-lg pointer-events-none" />
-            
+
             <div className="relative z-10">
               <h3 className="text-lg font-bold mb-3 leading-snug">Ragu Dengan Keaslian Informasi?</h3>
               <p className="text-xs font-semibold leading-relaxed text-white/90 mb-6">
