@@ -56,6 +56,20 @@ export interface FetchArtikelParams {
   lang?: string; // 'id', 'eng'
 }
 
+export function formatHoaxTitle(title: string, statusHoaks: boolean): string {
+  if (!title) return '';
+  const prefix = statusHoaks ? '[HOAKS]' : '[FAKTA]';
+  
+  let cleanTitle = title.trim();
+  if (cleanTitle.toUpperCase().startsWith('[HOAKS]')) {
+    cleanTitle = cleanTitle.substring(7).trim();
+  } else if (cleanTitle.toUpperCase().startsWith('[FAKTA]')) {
+    cleanTitle = cleanTitle.substring(7).trim();
+  }
+  
+  return `${prefix} ${cleanTitle}`;
+}
+
 export async function fetchArtikelHoaks(params: FetchArtikelParams = {}): Promise<ArtikelHoaksResponse> {
   const url = `/api/hoaks/content/artikel-hoaks`;
   const res = await fetch(url, {
@@ -77,7 +91,14 @@ export async function fetchArtikelHoaks(params: FetchArtikelParams = {}): Promis
   if (!res.ok) {
     throw new Error(`API error: ${res.status} ${res.statusText}`);
   }
-  return res.json();
+  const result: ArtikelHoaksResponse = await res.json();
+  if (result.data) {
+    result.data = result.data.map((item) => ({
+      ...item,
+      judul: formatHoaxTitle(item.judul, item.status_hoaks)
+    }));
+  }
+  return result;
 }
 
 export async function fetchDetailArtikel(slug: string, lang: string = 'id'): Promise<BaseApiResponse<ArtikelHoaksItem[]>> {
@@ -96,7 +117,14 @@ export async function fetchDetailArtikel(slug: string, lang: string = 'id'): Pro
   if (!res.ok) {
     throw new Error(`API error: ${res.status} ${res.statusText}`);
   }
-  return res.json();
+  const result: BaseApiResponse<ArtikelHoaksItem[]> = await res.json();
+  if (result.data) {
+    result.data = result.data.map((item) => ({
+      ...item,
+      judul: formatHoaxTitle(item.judul, item.status_hoaks)
+    }));
+  }
+  return result;
 }
 
 export async function fetchKumpulanTag(lang: string = 'id'): Promise<BaseApiResponse<TagItem[]>> {
