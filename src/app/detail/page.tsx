@@ -51,7 +51,7 @@ function SidebarLatestSlider({ items }: { items: ArtikelHoaksItem[] }) {
         Hoaks Terbaru
       </h2>
 
-      <div className="relative h-[220px] w-full overflow-hidden rounded-2xl shadow-sm group/slider">
+      <div className="relative aspect-[2/1] w-full overflow-hidden rounded-2xl shadow-sm group/slider">
         {items.map((item, idx) => (
           <Link
             key={item.slug}
@@ -113,7 +113,7 @@ function HoaxImage({ src, statusHoaks = true, small = false }: { src: string; st
     <div
       className={`relative overflow-hidden bg-center bg-gradient-to-br from-slate-100 to-slate-200 ${small
           ? 'w-[100px] h-[64px] sm:w-[130px] sm:h-[84px] bg-cover rounded-xl flex-shrink-0 shadow-sm border border-slate-200/50'
-          : 'aspect-[21/9] w-full bg-contain bg-no-repeat rounded-2xl shadow-sm border border-slate-200/50'
+          : 'aspect-[2/1] w-full bg-cover rounded-2xl shadow-sm border border-slate-200/50'
         }`}
       style={{ backgroundImage: `url("${encodeURI(src)}")` }}
       role="img"
