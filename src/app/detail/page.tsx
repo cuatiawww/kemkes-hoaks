@@ -182,6 +182,20 @@ function toTitleCase(str: string): string {
   )
 }
 
+function isWithin10Days(dateStr: string): boolean {
+  if (!dateStr) return false
+  try {
+    const cleanDateStr = dateStr.includes(' ') ? dateStr.replace(' ', 'T') : dateStr
+    const publishDate = new Date(cleanDateStr)
+    const currentDate = new Date()
+    const diffTime = Math.abs(currentDate.getTime() - publishDate.getTime())
+    const diffDays = diffTime / (1000 * 60 * 60 * 24)
+    return diffDays <= 10
+  } catch (e) {
+    return false
+  }
+}
+
 export default function DetailPage({ searchParams }: DetailPageProps) {
   const resolvedParams = use(searchParams)
   const slug = resolvedParams?.slug || ''
@@ -212,7 +226,7 @@ export default function DetailPage({ searchParams }: DetailPageProps) {
           const allItems = listRes.data || []
 
           setRelated(allItems.filter((item) => item.slug !== hoaxItem.slug).slice(0, 3))
-          setLatest(allItems.filter((item) => item.slug !== hoaxItem.slug).slice(0, 4))
+          setLatest(allItems.filter((item) => item.slug !== hoaxItem.slug || isWithin10Days(item.publish_date)).slice(0, 4))
         } else {
           setError('Detail artikel hoaks tidak ditemukan.')
         }
@@ -345,13 +359,14 @@ export default function DetailPage({ searchParams }: DetailPageProps) {
         </article>
 
         <aside className="lg:pt-10">
-          {related.length > 0 && (
-            <div className="mb-10">
-              <h2 className="text-xl font-bold text-slate-800 flex items-center gap-2">
-                <span className="w-1.5 h-6 bg-[#07877c] rounded-full" />
-                Hoaks Terkait
-              </h2>
-              <div className="mt-4 h-px bg-slate-200" />
+          <div className="mb-10">
+            <h2 className="text-xl font-bold text-slate-800 flex items-center gap-2">
+              <span className="w-1.5 h-6 bg-[#07877c] rounded-full" />
+              Hoaks Terkait
+            </h2>
+            <div className="mt-4 h-px bg-slate-200" />
+            
+            {related.length > 0 ? (
               <div className="space-y-6 pt-6">
                 {related.map((item) => (
                   <Link
@@ -373,15 +388,20 @@ export default function DetailPage({ searchParams }: DetailPageProps) {
                   </Link>
                 ))}
               </div>
-              <Link
-                href="/"
-                className="mt-6 inline-flex items-center gap-2 text-sm font-bold text-[#07877c] hover:underline"
-              >
-                Lihat Hoaks Lainnya
-                <ChevronRight className="h-4 w-4" />
-              </Link>
-            </div>
-          )}
+            ) : (
+              <p className="text-sm text-slate-500 italic pt-6">
+                Belum ada data hoaks terkait.
+              </p>
+            )}
+
+            <Link
+              href="/"
+              className="mt-6 inline-flex items-center gap-2 text-sm font-bold text-[#07877c] hover:underline"
+            >
+              Lihat Hoaks Lainnya
+              <ChevronRight className="h-4 w-4" />
+            </Link>
+          </div>
 
           <SidebarLatestSlider items={latest} />
 
