@@ -36,7 +36,7 @@ import HomeHero from '@/components/HomeHero'
 function ArticleImage({ src, compact = false }: { src: string; compact?: boolean }) {
   return (
     <div
-      className={`relative overflow-hidden bg-cover bg-center ${
+      className={`relative overflow-hidden bg-cover bg-center bg-gradient-to-br from-slate-100 to-slate-200 ${
         compact
           ? 'h-40 sm:h-full w-full rounded-t-2xl sm:rounded-l-2xl sm:rounded-tr-none'
           : 'h-52 w-full rounded-t-2xl sm:rounded-2xl'

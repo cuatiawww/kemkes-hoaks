@@ -61,7 +61,7 @@ function SidebarLatestSlider({ items }: { items: ArtikelHoaksItem[] }) {
             }`}
           >
             <div
-              className="absolute inset-0 bg-cover bg-center"
+              className="absolute inset-0 bg-cover bg-center bg-gradient-to-br from-slate-100 to-slate-200"
               style={{ backgroundImage: `url("${encodeURI(item.image)}")` }}
             >
               <div className="absolute inset-0 bg-black/5" />
@@ -112,10 +112,10 @@ function SidebarLatestSlider({ items }: { items: ArtikelHoaksItem[] }) {
 function HoaxImage({ src, small = false }: { src: string; small?: boolean }) {
   return (
     <div
-      className={`relative overflow-hidden bg-center ${
+      className={`relative overflow-hidden bg-center bg-gradient-to-br from-slate-100 to-slate-200 ${
         small 
           ? 'w-[100px] h-[64px] sm:w-[130px] sm:h-[84px] bg-cover rounded-xl flex-shrink-0 shadow-sm border border-slate-200/50' 
-          : 'aspect-[21/9] w-full bg-contain bg-no-repeat bg-white rounded-2xl shadow-sm border border-slate-200/50'
+          : 'aspect-[21/9] w-full bg-contain bg-no-repeat rounded-2xl shadow-sm border border-slate-200/50'
       }`}
       style={{ backgroundImage: `url("${encodeURI(src)}")` }}
       role="img"
@@ -212,7 +212,7 @@ export default function DetailPage({ searchParams }: DetailPageProps) {
           const allItems = listRes.data || []
 
           setRelated(allItems.filter((item) => item.slug !== hoaxItem.slug).slice(0, 3))
-          setLatest(allItems.slice(0, 4))
+          setLatest(allItems.filter((item) => item.slug !== hoaxItem.slug).slice(0, 4))
         } else {
           setError('Detail artikel hoaks tidak ditemukan.')
         }
@@ -345,39 +345,43 @@ export default function DetailPage({ searchParams }: DetailPageProps) {
         </article>
 
         <aside className="lg:pt-10">
-          <h2 className="text-xl font-bold text-slate-800 flex items-center gap-2">
-            <span className="w-1.5 h-6 bg-[#07877c] rounded-full" />
-            Hoaks Terkait
-          </h2>
-          <div className="mt-4 h-px bg-slate-200" />
-          <div className="space-y-6 pt-6">
-            {related.map((item) => (
+          {related.length > 0 && (
+            <div className="mb-10">
+              <h2 className="text-xl font-bold text-slate-800 flex items-center gap-2">
+                <span className="w-1.5 h-6 bg-[#07877c] rounded-full" />
+                Hoaks Terkait
+              </h2>
+              <div className="mt-4 h-px bg-slate-200" />
+              <div className="space-y-6 pt-6">
+                {related.map((item) => (
+                  <Link
+                    key={item.slug}
+                    href={`/detail?slug=${item.slug}`}
+                    className="group block border-b border-slate-200 pb-5 last:border-0 last:pb-0 transition-all duration-300 hover:translate-x-1"
+                  >
+                    <div className="flex gap-4 items-start">
+                      <HoaxImage src={item.image} small />
+                      <div className="flex-1 min-w-0">
+                        <h3 className="text-sm font-bold leading-snug text-slate-800 group-hover:text-[#07877c] transition-colors line-clamp-2">
+                          {item.judul}
+                        </h3>
+                        <p className="mt-1 text-xs text-slate-500 line-clamp-2 leading-relaxed">
+                          {stripHtmlAndTruncate(item.isi, 120)}
+                        </p>
+                      </div>
+                    </div>
+                  </Link>
+                ))}
+              </div>
               <Link
-                key={item.slug}
-                href={`/detail?slug=${item.slug}`}
-                className="group block border-b border-slate-200 pb-5 last:border-0 last:pb-0 transition-all duration-300 hover:translate-x-1"
+                href="/"
+                className="mt-6 inline-flex items-center gap-2 text-sm font-bold text-[#07877c] hover:underline"
               >
-                <div className="flex gap-4 items-start">
-                  <HoaxImage src={item.image} small />
-                  <div className="flex-1 min-w-0">
-                    <h3 className="text-sm font-bold leading-snug text-slate-800 group-hover:text-[#07877c] transition-colors line-clamp-2">
-                      {item.judul}
-                    </h3>
-                    <p className="mt-1 text-xs text-slate-500 line-clamp-2 leading-relaxed">
-                      {stripHtmlAndTruncate(item.isi, 120)}
-                    </p>
-                  </div>
-                </div>
+                Lihat Hoaks Lainnya
+                <ChevronRight className="h-4 w-4" />
               </Link>
-            ))}
-          </div>
-          <Link
-            href="/"
-            className="mt-6 inline-flex items-center gap-2 text-sm font-bold text-[#07877c] hover:underline"
-          >
-            Lihat Hoaks Lainnya
-            <ChevronRight className="h-4 w-4" />
-          </Link>
+            </div>
+          )}
 
           <SidebarLatestSlider items={latest} />
 
