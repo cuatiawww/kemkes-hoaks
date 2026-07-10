@@ -33,7 +33,7 @@ import {
 import SiteHeader from '@/components/SiteHeader'
 import HomeHero from '@/components/HomeHero'
 
-function ArticleImage({ src, compact = false }: { src: string; compact?: boolean }) {
+function ArticleImage({ src, statusHoaks = true, compact = false }: { src: string; statusHoaks?: boolean; compact?: boolean }) {
   return (
     <div
       className={`relative overflow-hidden bg-cover bg-center bg-gradient-to-br from-slate-100 to-slate-200 ${
@@ -48,8 +48,8 @@ function ArticleImage({ src, compact = false }: { src: string; compact?: boolean
       <div className="absolute inset-0 bg-black/5" />
       <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
         <img
-          src="/watermark.png"
-          alt="Hoaks Watermark"
+          src={statusHoaks ? "/watermark.png" : "/watermark2.png"}
+          alt="Status Watermark"
           className={`object-contain opacity-95 select-none -rotate-12 transition-transform duration-300 ${
             compact ? 'w-[130px] sm:w-[150px]' : 'w-[260px] sm:w-[320px]'
           }`}
@@ -102,7 +102,7 @@ function LatestHoaxSlider({ items }: { items: ArtikelHoaksItem[] }) {
           {items.map((article) => (
             <div key={article.slug} className="w-full md:w-1/2 flex-shrink-0 px-3">
               <Link href={`/detail?slug=${article.slug}`} className="group block">
-                <ArticleImage src={article.image} />
+                <ArticleImage src={article.image} statusHoaks={article.status_hoaks} />
                 <h3 className="mt-8 text-lg font-bold leading-tight text-[#3b3b3b] transition group-hover:text-[#07877c] line-clamp-1">
                   {article.judul}
                 </h3>
@@ -237,6 +237,7 @@ export default function HomePage({ searchParams }: HomePageProps) {
     date: formatDate(item.publish_date, 'id'),
     description: stripHtmlAndTruncate(item.isi, 180),
     visitor: item.visitor,
+    statusHoaks: item.status_hoaks,
   }))
 
   const [currentPage, setCurrentPage] = useState(1)
@@ -460,7 +461,7 @@ export default function HomePage({ searchParams }: HomePageProps) {
                     href={`/detail?slug=${article.slug}`}
                     className="group grid gap-6 pb-6 border-b border-slate-200 last:border-0 last:pb-0 transition-all duration-300 sm:grid-cols-[180px_1fr] hover:translate-x-1"
                   >
-                    <ArticleImage src={article.image} compact />
+                    <ArticleImage src={article.image} statusHoaks={article.statusHoaks} compact />
                     <div className="flex flex-col justify-between py-1 min-w-0">
                       <div>
                         <h3 className="text-lg font-bold leading-snug text-slate-800 group-hover:text-[#07877c] transition-colors truncate">

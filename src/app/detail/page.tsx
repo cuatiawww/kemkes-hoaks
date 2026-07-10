@@ -67,8 +67,8 @@ function SidebarLatestSlider({ items }: { items: ArtikelHoaksItem[] }) {
               <div className="absolute inset-0 bg-black/5" />
               <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
                 <img
-                  src="/watermark.png"
-                  alt="Hoaks Watermark"
+                  src={item.status_hoaks ? "/watermark.png" : "/watermark2.png"}
+                  alt="Status Watermark"
                   className="object-contain opacity-95 select-none -rotate-12 w-[140px]"
                 />
               </div>
@@ -109,7 +109,7 @@ function SidebarLatestSlider({ items }: { items: ArtikelHoaksItem[] }) {
   )
 }
 
-function HoaxImage({ src, small = false }: { src: string; small?: boolean }) {
+function HoaxImage({ src, statusHoaks = true, small = false }: { src: string; statusHoaks?: boolean; small?: boolean }) {
   return (
     <div
       className={`relative overflow-hidden bg-center bg-gradient-to-br from-slate-100 to-slate-200 ${
@@ -124,8 +124,8 @@ function HoaxImage({ src, small = false }: { src: string; small?: boolean }) {
       <div className="absolute inset-0 bg-black/5 pointer-events-none" />
       <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
         <img
-          src="/watermark.png"
-          alt="Hoaks Watermark"
+          src={statusHoaks ? "/watermark.png" : "/watermark2.png"}
+          alt="Status Watermark"
           className={`object-contain opacity-95 select-none -rotate-12 ${
             small ? 'w-[85px] sm:w-[95px]' : 'w-[320px] sm:w-[420px] max-w-[85%]'
           }`}
@@ -302,7 +302,7 @@ export default function DetailPage({ searchParams }: DetailPageProps) {
           </p>
 
           <div className="mt-6 max-w-[745px]">
-            <HoaxImage src={hoax.image} />
+            <HoaxImage src={hoax.image} statusHoaks={hoax.status_hoaks} />
           </div>
 
           <div className="border-l-4 border-[#07877c] pl-6 mt-8 max-w-[727px] text-lg leading-8 text-[#525252]">
@@ -375,7 +375,7 @@ export default function DetailPage({ searchParams }: DetailPageProps) {
                     className="group block border-b border-slate-200 pb-5 last:border-0 last:pb-0 transition-all duration-300 hover:translate-x-1"
                   >
                     <div className="flex gap-4 items-start">
-                      <HoaxImage src={item.image} small />
+                      <HoaxImage src={item.image} statusHoaks={item.status_hoaks} small />
                       <div className="flex-1 min-w-0">
                         <h3 className="text-sm font-bold leading-snug text-slate-800 group-hover:text-[#07877c] transition-colors line-clamp-2">
                           {item.judul}
