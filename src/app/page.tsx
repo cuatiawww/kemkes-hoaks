@@ -32,6 +32,7 @@ import {
 } from '@/lib/api'
 import SiteHeader from '@/components/SiteHeader'
 import HomeHero from '@/components/HomeHero'
+import ReportHoaxModal from '@/components/ReportHoaxModal'
 
 function ArticleImage({ src, statusHoaks = true, compact = false }: { src: string; statusHoaks?: boolean; compact?: boolean }) {
   return (
@@ -166,6 +167,7 @@ export default function HomePage({ searchParams }: HomePageProps) {
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
   const [totalHoaxes, setTotalHoaxes] = useState<number>(1241)
+  const [isReportModalOpen, setIsReportModalOpen] = useState(false)
 
   // Update query if URL searchParams change
   useEffect(() => {
@@ -347,11 +349,23 @@ export default function HomePage({ searchParams }: HomePageProps) {
           <div className="animate-marquee-scroll whitespace-nowrap pl-[160px] text-xs font-bold text-slate-600 flex items-center h-full">
             <span className="inline-block mx-4">• Portal Resmi Terpadu Rumah Sakit Kemenkes RI: Akses Layanan Kesehatan Terpusat</span>
             <span className="inline-block mx-4">• Panduan Layanan Kesehatan Masyarakat 2026</span>
-            <span className="inline-block mx-4">• Laporkan Isu Hoaks melalui WhatsApp Official</span>
+            <button
+              type="button"
+              onClick={() => setIsReportModalOpen(true)}
+              className="inline-block mx-4 text-[#07877c] font-black hover:underline cursor-pointer"
+            >
+              • Laporkan Isu Hoaks Kesehatan (Formulir Cek Fakta Publik)
+            </button>
             <span className="inline-block mx-4">• Selalu Cek Keaslian Berita Sebelum Membagikan</span>
             <span className="inline-block mx-4">• Portal Resmi Terpadu Rumah Sakit Kemenkes RI: Akses Layanan Kesehatan Terpusat</span>
             <span className="inline-block mx-4">• Panduan Layanan Kesehatan Masyarakat 2026</span>
-            <span className="inline-block mx-4">• Laporkan Isu Hoaks melalui WhatsApp Official</span>
+            <button
+              type="button"
+              onClick={() => setIsReportModalOpen(true)}
+              className="inline-block mx-4 text-[#07877c] font-black hover:underline cursor-pointer"
+            >
+              • Laporkan Isu Hoaks Kesehatan (Formulir Cek Fakta Publik)
+            </button>
             <span className="inline-block mx-4">• Selalu Cek Keaslian Berita Sebelum Membagikan</span>
           </div>
         </div>
@@ -564,6 +578,11 @@ export default function HomePage({ searchParams }: HomePageProps) {
           </div>
         </div>
       </footer>
+
+      <ReportHoaxModal
+        isOpen={isReportModalOpen}
+        onClose={() => setIsReportModalOpen(false)}
+      />
     </main>
   )
 }

@@ -20,6 +20,7 @@ import {
 } from '@/lib/api'
 import SiteHeader from '@/components/SiteHeader'
 import HomeHero from '@/components/HomeHero'
+import ReportHoaxModal from '@/components/ReportHoaxModal'
 
 function SidebarLatestSlider({ items }: { items: ArtikelHoaksItem[] }) {
   const [currentIndex, setCurrentIndex] = useState(0)
@@ -204,6 +205,7 @@ export default function DetailPage({ searchParams }: DetailPageProps) {
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
   const [totalHoaxes, setTotalHoaxes] = useState<number>(1241)
+  const [isReportModalOpen, setIsReportModalOpen] = useState(false)
 
   useEffect(() => {
     if (!slug) return
@@ -412,18 +414,22 @@ export default function DetailPage({ searchParams }: DetailPageProps) {
               <p className="text-xs font-semibold leading-relaxed text-white/90 mb-6">
                 Hubungi kami jika Anda masih memiliki keraguan dalam berita yang bertebaran untuk dicek kevalidan hoaksnya oleh tim ahli kami.
               </p>
-              <Link
-                href="https://wa.me/628111222333"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-flex w-full items-center justify-center rounded-xl bg-[#d6ef21] py-3 text-sm font-bold text-[#07877c] hover:bg-[#c9e21a] transition-all hover:scale-[1.02] shadow-sm"
+              <button
+                type="button"
+                onClick={() => setIsReportModalOpen(true)}
+                className="inline-flex w-full items-center justify-center rounded-xl bg-[#d6ef21] py-3 text-sm font-bold text-[#07877c] hover:bg-[#c9e21a] transition-all hover:scale-[1.02] shadow-sm cursor-pointer"
               >
                 Laporkan Isu / Cek Fakta
-              </Link>
+              </button>
             </div>
           </div>
         </aside>
       </section>
+
+      <ReportHoaxModal
+        isOpen={isReportModalOpen}
+        onClose={() => setIsReportModalOpen(false)}
+      />
 
       <SiteFooter />
     </main>
