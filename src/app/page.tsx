@@ -3,22 +3,31 @@
 import { use, useState, useEffect, useRef } from 'react'
 import { useRouter } from 'next/navigation'
 import {
+  Activity,
+  Building2,
   CalendarDays,
   CheckCircle2,
   ChevronLeft,
   ChevronRight,
   CircleUserRound,
+  Contact,
   FileText,
   Home,
   Info,
   Languages,
+  LayoutGrid,
+  Leaf,
+  Megaphone,
   Menu,
+  MoreHorizontal,
   Newspaper,
   Phone,
   PlayCircle,
   Search,
   ShieldCheck,
   Stethoscope,
+  Syringe,
+  UserCheck,
   UsersRound,
 } from 'lucide-react'
 import Link from 'next/link'
@@ -134,13 +143,76 @@ interface HomePageProps {
   searchParams: Promise<{ q?: string }>
 }
 
-const iconMap: Record<string, any> = {
-  'vaksinasi': UsersRound,
-  'obat-obatan': Stethoscope,
-  'pengobatan': ShieldCheck,
-  'kedokteran': FileText,
-  'kegiatan': CalendarDays,
-  'artikel-berita': Newspaper,
+interface CategoryPill {
+  id: string
+  label: string
+  icon: any
+}
+
+const CATEGORY_ITEMS: CategoryPill[] = [
+  { id: 'semua', label: 'Semua', icon: LayoutGrid },
+  { id: 'imunisasi', label: 'Imunisasi', icon: Syringe },
+  { id: 'surat-palsu', label: 'Surat Palsu', icon: FileText },
+  { id: 'identitas-palsu', label: 'Identitas Palsu', icon: Contact },
+  { id: 'calo-kesehatan', label: 'Calo Kesehatan', icon: UserCheck },
+  { id: 'penyakit', label: 'Penyakit', icon: Activity },
+  { id: 'obat-suplemen-herbal', label: 'Obat, Suplemen & Herbal', icon: Leaf },
+  { id: 'layanan-kesehatan', label: 'Layanan Kesehatan', icon: Building2 },
+  { id: 'pengaduan-masyarakat', label: 'Pengaduan Masyarakat', icon: Megaphone },
+  { id: 'lain-lain', label: 'Lain-lain', icon: MoreHorizontal },
+]
+
+function matchesCategoryFilter(catName: string = '', catSlug: string = '', selected: string | null): boolean {
+  if (!selected || selected === 'Semua') return true
+  const s = selected.toLowerCase()
+  const name = (catName || '').toLowerCase()
+  const slug = (catSlug || '').toLowerCase()
+
+  if (name === s || slug === s) return true
+
+  if (s === 'imunisasi' && (name.includes('vaksin') || slug.includes('vaksin') || name.includes('imunisasi'))) return true
+  if (s === 'obat, suplemen & herbal' && (name.includes('obat') || slug.includes('obat') || name.includes('herbal'))) return true
+  if (s === 'layanan kesehatan' && (name.includes('layanan') || name.includes('pengobatan') || slug.includes('pengobatan'))) return true
+  if (s === 'surat palsu' && (name.includes('surat') || name.includes('dokumen') || name.includes('kedokteran'))) return true
+  if (s === 'identitas palsu' && (name.includes('identitas') || slug.includes('identitas'))) return true
+  if (s === 'calo kesehatan' && (name.includes('calo') || slug.includes('calo'))) return true
+  if (s === 'penyakit' && (name.includes('penyakit') || slug.includes('penyakit'))) return true
+  if (s === 'pengaduan masyarakat' && (name.includes('pengaduan') || name.includes('lapor') || slug.includes('aduan'))) return true
+  if (s === 'lain-lain' && (!name || name.includes('lain') || name.includes('kegiatan') || name.includes('artikel'))) return true
+
+  return false
+}
+
+function getCategoryDetails(catName: string = '', catSlug: string = ''): { label: string; icon: any } {
+  const name = (catName || '').toLowerCase()
+  const slug = (catSlug || '').toLowerCase()
+
+  if (name.includes('imunisasi') || name.includes('vaksin') || slug.includes('vaksin')) {
+    return { label: 'Imunisasi', icon: Syringe }
+  }
+  if (name.includes('surat') || name.includes('dokumen') || name.includes('kedokteran')) {
+    return { label: 'Surat Palsu', icon: FileText }
+  }
+  if (name.includes('identitas') || slug.includes('identitas')) {
+    return { label: 'Identitas Palsu', icon: Contact }
+  }
+  if (name.includes('calo') || slug.includes('calo')) {
+    return { label: 'Calo Kesehatan', icon: UserCheck }
+  }
+  if (name.includes('penyakit') || slug.includes('penyakit')) {
+    return { label: 'Penyakit', icon: Activity }
+  }
+  if (name.includes('obat') || name.includes('herbal') || slug.includes('obat')) {
+    return { label: 'Obat, Suplemen & Herbal', icon: Leaf }
+  }
+  if (name.includes('layanan') || name.includes('pengobatan') || slug.includes('pengobatan')) {
+    return { label: 'Layanan Kesehatan', icon: Building2 }
+  }
+  if (name.includes('pengaduan') || name.includes('lapor') || slug.includes('aduan')) {
+    return { label: 'Pengaduan Masyarakat', icon: Megaphone }
+  }
+
+  return { label: catName ? toTitleCase(catName) : 'Imunisasi', icon: Syringe }
 }
 
 function toTitleCase(str: string): string {
@@ -160,7 +232,6 @@ export default function HomePage({ searchParams }: HomePageProps) {
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null)
 
   const [articles, setArticles] = useState<ArtikelHoaksItem[]>([])
-  const [categories, setCategories] = useState<{ label: string; count: number; icon: any }[]>([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
   const [totalHoaxes, setTotalHoaxes] = useState<number>(1241)
@@ -179,31 +250,11 @@ export default function HomePage({ searchParams }: HomePageProps) {
         setLoading(true)
         setError(null)
 
-        // Fetch articles and categories
-        const [articlesRes, categoriesRes] = await Promise.all([
-          fetchArtikelHoaks({ per_page: '100', page: '1', lang: 'id' }),
-          fetchKategori()
-        ])
-
+        // Fetch articles
+        const articlesRes = await fetchArtikelHoaks({ per_page: '100', page: '1', lang: 'id' })
         const articlesList = articlesRes.data || []
         setArticles(articlesList)
         setTotalHoaxes(articlesRes.total_data || articlesList.length || 1241)
-
-        const apiCategories = categoriesRes.data || []
-        const mappedCategories = apiCategories.map((cat) => {
-          const slug = cat.slug.toLowerCase()
-          const count = articlesList.filter(
-            (art) => art.kategori?.slug?.toLowerCase() === slug
-          ).length
-
-          return {
-            label: toTitleCase(cat.nama_kategori),
-            count: count,
-            icon: iconMap[slug] || ShieldCheck,
-          }
-        })
-
-        setCategories(mappedCategories)
       } catch (err: any) {
         console.error(err)
         setError('Gagal mengambil data dari server. Pastikan API lokal/dev Anda aktif.')
@@ -217,9 +268,11 @@ export default function HomePage({ searchParams }: HomePageProps) {
 
   // Filter hoaxes for display
   const filteredHoaxes = articles.filter((item) => {
-    const matchesCategory =
-      !selectedCategory ||
-      item.kategori?.nama?.toLowerCase() === selectedCategory.toLowerCase()
+    const matchesCategory = matchesCategoryFilter(
+      item.kategori?.nama,
+      item.kategori?.slug,
+      selectedCategory
+    )
 
     const matchesSearch =
       !searchQuery ||
@@ -231,28 +284,28 @@ export default function HomePage({ searchParams }: HomePageProps) {
 
   const isFilterActive = !!selectedCategory || !!searchQuery
 
-  const displayPopular = filteredHoaxes.map((item) => ({
-    title: item.judul,
-    image: item.image,
-    slug: item.slug,
-    date: formatDate(item.publish_date, 'id'),
-    description: stripHtmlAndTruncate(item.isi, 180),
-    visitor: item.visitor,
-    statusHoaks: item.status_hoaks,
-  }))
+  const displayPopular = filteredHoaxes.map((item) => {
+    const catDetails = getCategoryDetails(item.kategori?.nama, item.kategori?.slug)
+    return {
+      title: item.judul,
+      image: item.image,
+      slug: item.slug,
+      date: formatDate(item.publish_date, 'id'),
+      description: stripHtmlAndTruncate(item.isi, 180),
+      visitor: item.visitor,
+      statusHoaks: item.status_hoaks,
+      categoryLabel: catDetails.label,
+      CategoryIcon: catDetails.icon,
+    }
+  })
 
   const [currentPage, setCurrentPage] = useState(1)
-  const ITEMS_PER_PAGE = 4
+  const ITEMS_PER_PAGE = 10
 
   // Reset page to 1 when filters change
   useEffect(() => {
     setCurrentPage(1)
   }, [searchQuery, selectedCategory])
-
-  const toggleCategory = (label: string, count: number) => {
-    if (count === 0) return
-    setSelectedCategory((prev) => (prev === label ? null : label))
-  }
 
   const totalPages = Math.ceil(displayPopular.length / ITEMS_PER_PAGE)
   const paginatedPopular = displayPopular.slice((currentPage - 1) * ITEMS_PER_PAGE, currentPage * ITEMS_PER_PAGE)
@@ -400,165 +453,174 @@ export default function HomePage({ searchParams }: HomePageProps) {
         </div>
       </div>
 
-      <section className="mx-auto max-w-[1160px] px-4 pb-28 pt-12">
+      {/* Section Kategori Isu (Tepat sebelum section Hasil Penelusuran - Sesuai Gambar 1) */}
+      <section className="mx-auto max-w-[1160px] px-4 pt-10 pb-2">
+        <div className="mb-4">
+          <h2 className="text-lg sm:text-xl font-extrabold uppercase tracking-wide text-[#07877c]">
+            KATEGORI ISU
+          </h2>
+          <div className="mt-1.5 h-1 w-10 bg-[#07877c] rounded-full" />
+        </div>
+
+        <div className="flex items-center gap-3 overflow-x-auto pb-3 pt-1 no-scrollbar -mx-4 px-4 sm:mx-0 sm:px-0 flex-nowrap whitespace-nowrap">
+          {CATEGORY_ITEMS.map((cat) => {
+            const isSelected =
+              (!selectedCategory && cat.label === 'Semua') ||
+              selectedCategory === cat.label
+            const IconComponent = cat.icon
+
+            return (
+              <button
+                key={cat.id}
+                type="button"
+                onClick={() => {
+                  if (cat.label === 'Semua') {
+                    setSelectedCategory(null)
+                  } else {
+                    setSelectedCategory(selectedCategory === cat.label ? null : cat.label)
+                  }
+                }}
+                className={`flex-shrink-0 flex items-center gap-2.5 rounded-full px-5 py-2.5 text-xs sm:text-sm font-bold transition-all duration-200 cursor-pointer shadow-xs whitespace-nowrap ${
+                  isSelected
+                    ? 'bg-[#07877c] text-white shadow-md border border-[#07877c] scale-[1.02]'
+                    : 'bg-white text-slate-700 border border-slate-200/90 hover:border-[#07877c] hover:text-[#07877c] hover:shadow-sm'
+                }`}
+              >
+                <IconComponent
+                  className={`h-4 w-4 sm:h-4.5 sm:w-4.5 transition-colors ${
+                    isSelected ? 'text-white' : 'text-[#07877c]'
+                  }`}
+                />
+                <span>{cat.label}</span>
+              </button>
+            )
+          })}
+        </div>
+      </section>
+
+      <section className="mx-auto max-w-[1160px] px-4 pb-28 pt-2">
+        {/* Section Hoaks Kesehatan Terbaru (Dihilangkan/Sembunyikan sesuai arahan agar fokus pada layanan Cek Fakta)
         <h2 className="text-2xl font-bold uppercase tracking-wide text-[#747474]">Hoaks Kesehatan Terbaru</h2>
         <div className="mt-6 h-px bg-[#d7d7d7]" />
         <LatestHoaxSlider items={articles.slice(0, 6)} />
+        */}
 
-        <h2 className="mt-16 text-2xl font-bold uppercase tracking-wide text-[#747474]">
-          Hoaks Kesehatan Terpopuler
-        </h2>
-        {isFilterActive && (
-          <p className="mt-2 text-sm font-semibold text-[#8d8d8d]">
-            {selectedCategory && `Kategori: ${selectedCategory}`}
-            {selectedCategory && searchQuery && '  •  '}
-            {searchQuery && `Pencarian: "${searchQuery}"`}
-            {'  •  '}
-            Terdapat {displayPopular.length} artikel hoaks
+        {/* Section Title & Subtitle Narasi Penelusuran Cek Fakta (Dengan Transisi Smooth) */}
+        <div
+          className={`transition-all duration-300 ease-in-out overflow-hidden ${
+            isFilterActive
+              ? 'max-h-40 opacity-100 mb-5 pt-2'
+              : 'max-h-0 opacity-0 mb-0 pt-0 pointer-events-none'
+          }`}
+        >
+          <h2 className="text-xl sm:text-2xl font-black uppercase tracking-wide text-[#333333]">
+            {displayPopular.length} Isu Hoaks Ditemukan
+          </h2>
+
+          <p className="mt-2 text-sm font-medium text-slate-500 leading-relaxed max-w-3xl">
+            {selectedCategory && searchQuery ? (
+              <>
+                Menampilkan laporan cek fakta untuk kategori <span className="font-bold text-slate-800">"{selectedCategory}"</span> dengan kata kunci <span className="font-bold text-slate-800">"{searchQuery}"</span>.
+              </>
+            ) : selectedCategory ? (
+              <>
+                Menampilkan laporan cek fakta resmi terverifikasi untuk kategori <span className="font-bold text-slate-800">"{selectedCategory}"</span>.
+              </>
+            ) : (
+              <>
+                Menampilkan laporan cek fakta yang cocok dengan pencarian <span className="font-bold text-slate-800">"{searchQuery}"</span>.
+              </>
+            )}
           </p>
-        )}
-        <div className="mt-4 h-px bg-[#d7d7d7]" />
+          <div className="mt-4 h-px bg-[#d7d7d7]" />
+        </div>
 
-        <div className="mt-10 grid gap-14 lg:grid-cols-[320px_1fr]">
-          <aside className="min-w-0">
-            <h3 className="mb-6 text-lg font-bold text-[#747474] hidden lg:block">Kategori Hoaks</h3>
-            <div className="flex gap-3 overflow-x-auto pb-4 no-scrollbar -mx-4 px-4 lg:mx-0 lg:px-0 lg:pb-0 lg:flex-col lg:overflow-visible lg:space-y-0">
-              {categories.map((category) => {
-                const isSelected = selectedCategory === category.label
-                const hasResults = category.count > 0
-
+        <div className="mt-3">
+          {paginatedPopular.length > 0 ? (
+            <div className="space-y-5">
+              {paginatedPopular.map((article) => {
+                const CategoryIcon = article.CategoryIcon
                 return (
-                  <button
-                    key={category.label}
-                    disabled={!hasResults}
-                    onClick={() => toggleCategory(category.label, category.count)}
-                    className={`flex-shrink-0 flex items-center gap-3 rounded-full border px-4 py-2 text-xs font-bold transition-all
-                      lg:w-full lg:flex lg:items-center lg:justify-between lg:border-0 lg:border-b lg:border-[#d9d9d9] lg:py-5 lg:rounded-none lg:px-0 lg:bg-transparent lg:shadow-none
-                      ${hasResults
-                        ? isSelected
-                          ? 'bg-[#07877c] text-white border-[#07877c] lg:text-[#07877c] lg:bg-transparent lg:border-transparent'
-                          : 'bg-white text-slate-700 border-slate-200 hover:border-[#07877c] hover:text-[#07877c] lg:border-transparent lg:hover:border-transparent'
-                        : 'bg-slate-50 text-slate-400 border-slate-100 cursor-not-allowed opacity-50 lg:border-transparent'
-                      }
-                    `}
-                  >
-                    <span className="flex items-center gap-2 lg:gap-5">
-                      <span className={`flex h-7 w-7 lg:h-8 lg:w-8 items-center justify-center rounded-full lg:rounded-md transition ${hasResults
-                        ? isSelected
-                          ? 'bg-white text-[#07877c] lg:bg-[#07877c] lg:text-white'
-                          : 'bg-[#07877c]/15 text-[#07877c]'
-                        : 'bg-slate-100 text-slate-400'
-                        }`}>
-                        <category.icon className="h-4 w-4 lg:h-5 lg:w-5" />
-                      </span>
-                      <span className={`text-xs lg:text-base font-semibold ${isSelected ? 'font-extrabold text-white lg:text-[#07877c]' : 'text-slate-700'}`}>
-                        {category.label}
-                      </span>
-                    </span>
-                    <span className="flex items-center gap-2">
-                      <span className={`text-xs lg:text-base font-extrabold ${hasResults
-                        ? isSelected
-                          ? 'text-white/90 lg:text-[#07877c]'
-                          : 'text-[#07877c]'
-                        : 'text-slate-400'
-                        }`}>
-                        ({category.count})
-                      </span>
-                      <span className={`hidden lg:flex h-5 w-5 items-center justify-center rounded-lg transition-all duration-300 text-white ${hasResults
-                        ? isSelected
-                          ? 'bg-[#07877c] rotate-90'
-                          : 'bg-[#07877c]/20 text-[#07877c] rotate-0'
-                        : 'bg-slate-200 text-slate-400'
-                        }`}>
-                        <ChevronRight className="h-3.5 w-3.5" />
-                      </span>
-                    </span>
-                  </button>
-                )
-              })}
-            </div>
-          </aside>
-
-          <div className="flex flex-col justify-between min-w-0">
-            <div
-              className="space-y-8 lg:max-h-[680px] lg:overflow-y-auto lg:pr-4"
-              style={{
-                scrollbarWidth: 'thin',
-                scrollbarColor: '#07877c #f1f1f1'
-              }}
-            >
-              {paginatedPopular.length > 0 ? (
-                paginatedPopular.map((article) => (
                   <Link
                     key={article.title}
                     href={`/detail?slug=${article.slug}`}
-                    className="group grid gap-6 pb-6 border-b border-slate-200 last:border-0 last:pb-0 transition-all duration-300 sm:grid-cols-[180px_1fr] hover:translate-x-1"
+                    className="group bg-white border border-slate-200/80 hover:border-[#07877c]/40 rounded-2xl p-5 sm:p-6 shadow-xs hover:shadow-md transition-all duration-300 grid gap-6 sm:grid-cols-[280px_1fr] items-center"
                   >
                     <ArticleImage src={article.image} statusHoaks={article.statusHoaks} compact />
-                    <div className="flex flex-col justify-between py-1 min-w-0">
+                    <div className="flex flex-col justify-between h-full py-1 min-w-0">
                       <div>
-                        <h3 className="text-lg font-bold leading-snug text-slate-800 group-hover:text-[#07877c] transition-colors truncate">
+                        {/* Category Badge (Icon + Uppercase Text in Teal) */}
+                        <div className="flex items-center gap-2 text-xs font-extrabold uppercase tracking-wide text-[#07877c] mb-2">
+                          <CategoryIcon className="w-4 h-4 text-[#07877c]" />
+                          <span>{article.categoryLabel}</span>
+                        </div>
+                        <h3 className="text-lg sm:text-xl font-bold leading-snug text-[#333333] group-hover:text-[#07877c] transition-colors line-clamp-2">
                           {article.title}
                         </h3>
-                        <p className="mt-2 line-clamp-2 text-sm font-medium text-slate-500 leading-relaxed">
+                        <p className="mt-2.5 line-clamp-2 text-sm font-medium text-slate-500 leading-relaxed">
                           {article.description}
                         </p>
                       </div>
-                      <p className="mt-3 text-xs font-semibold text-slate-400">
-                        {article.date} <span className="px-3">•</span> Dilihat {article.visitor || 0} Kali <span className="px-3">•</span> Waktu Baca 3 Menit
-                      </p>
+                      <div className="mt-5 flex flex-wrap items-center justify-between gap-2 text-xs sm:text-sm font-semibold text-slate-400 border-t border-slate-100 pt-3.5">
+                        <span>
+                          {article.date} <span className="px-2">•</span> Dilihat {article.visitor || 0} Kali <span className="px-2">•</span> Waktu Baca 3 Menit
+                        </span>
+                        <span className="font-extrabold text-[#07877c] group-hover:translate-x-1 transition-transform flex items-center gap-1 whitespace-nowrap text-sm">
+                          Baca Selengkapnya <ChevronRight className="w-4 h-4 inline" />
+                        </span>
+                      </div>
                     </div>
                   </Link>
-                ))
-              ) : (
-                <div className="border border-slate-200 rounded-2xl p-12 text-center shadow-sm bg-white/40">
-                  <h3 className="text-xl font-bold text-[#747474] mb-2">Hasil tidak ditemukan</h3>
-                  <p className="text-sm font-semibold text-[#9a9a9a]">
-                    Coba kata kunci lain atau pilih kategori hoaks yang memiliki data.
-                  </p>
-                </div>
-              )}
+                )
+              })}
             </div>
+          ) : (
+            <div className="border border-slate-200 rounded-2xl p-12 text-center shadow-sm bg-white">
+              <h3 className="text-xl font-bold text-[#747474] mb-2">Hasil tidak ditemukan</h3>
+              <p className="text-sm font-semibold text-[#9a9a9a]">
+                Coba kata kunci lain atau pilih kategori hoaks yang memiliki data.
+              </p>
+            </div>
+          )}
 
-            {/* Pagination Controls */}
-            {totalPages >= 0 && (
-              <div className="flex flex-wrap items-center justify-center gap-3 mt-12 pb-4">
-                <button
-                  onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
-                  disabled={currentPage === 1}
-                  className="h-10 px-5 rounded-full bg-[#07877c]/10 text-[#07877c] font-extrabold text-xs flex items-center gap-1.5 hover:bg-[#07877c]/20 disabled:opacity-40 disabled:cursor-not-allowed transition-all"
-                >
-                  <ChevronLeft className="h-4 w-4" />
-                  <span>Sebelumnya</span>
-                </button>
+          {/* Pagination Controls */}
+          {totalPages >= 1 && (
+            <div className="flex flex-wrap items-center justify-center gap-3 mt-12 pb-4">
+              <button
+                onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
+                disabled={currentPage === 1}
+                className="h-10 px-5 rounded-full bg-[#07877c]/10 text-[#07877c] font-extrabold text-xs flex items-center gap-1.5 hover:bg-[#07877c]/20 disabled:opacity-40 disabled:cursor-not-allowed transition-all"
+              >
+                <ChevronLeft className="h-4 w-4" />
+                <span>Sebelumnya</span>
+              </button>
 
-                {getVisiblePages().map((pageNum) => {
-                  const isActive = currentPage === pageNum
-                  return (
-                    <button
-                      key={pageNum}
-                      onClick={() => setCurrentPage(pageNum)}
-                      className={`h-10 w-10 rounded-full font-bold text-sm flex items-center justify-center transition-all ${isActive
-                        ? 'bg-[#07877c] text-white shadow-md font-extrabold scale-105'
-                        : 'bg-[#07877c]/10 text-[#07877c] hover:bg-[#07877c]/20'
-                        }`}
-                    >
-                      {pageNum}
-                    </button>
-                  )
-                })}
+              {getVisiblePages().map((pageNum) => {
+                const isActive = currentPage === pageNum
+                return (
+                  <button
+                    key={pageNum}
+                    onClick={() => setCurrentPage(pageNum)}
+                    className={`h-10 w-10 rounded-full font-bold text-sm flex items-center justify-center transition-all ${isActive
+                      ? 'bg-[#07877c] text-white shadow-md font-extrabold scale-105'
+                      : 'bg-[#07877c]/10 text-[#07877c] hover:bg-[#07877c]/20'
+                      }`}
+                  >
+                    {pageNum}
+                  </button>
+                )
+              })}
 
-                <button
-                  onClick={() => setCurrentPage((prev) => Math.min(prev + 1, Math.max(totalPages, 1)))}
-                  disabled={currentPage >= Math.max(totalPages, 1)}
-                  className="h-10 px-5 rounded-full bg-[#07877c]/10 text-[#07877c] font-extrabold text-xs flex items-center gap-1.5 hover:bg-[#07877c]/20 disabled:opacity-40 disabled:cursor-not-allowed transition-all"
-                >
-                  <span>Selanjutnya</span>
-                  <ChevronRight className="h-4 w-4" />
-                </button>
-              </div>
-            )}
-          </div>
+              <button
+                onClick={() => setCurrentPage((prev) => Math.min(prev + 1, Math.max(totalPages, 1)))}
+                disabled={currentPage >= Math.max(totalPages, 1)}
+                className="h-10 px-5 rounded-full bg-[#07877c]/10 text-[#07877c] font-extrabold text-xs flex items-center gap-1.5 hover:bg-[#07877c]/20 disabled:opacity-40 disabled:cursor-not-allowed transition-all"
+              >
+                <span>Selanjutnya</span>
+                <ChevronRight className="h-4 w-4" />
+              </button>
+            </div>
+          )}
         </div>
       </section>
 
@@ -632,3 +694,4 @@ function MusicIcon({ className }: { className?: string }) {
     </svg>
   )
 }
+
