@@ -94,7 +94,8 @@ export default function ReportHoaxModal({ isOpen, onClose }: ReportHoaxModalProp
     setIsSubmitting(true)
 
     try {
-      const response = await fetch('http://localhost/hoaks-yii/api/pengaduan/submit', {
+      const apiBase = process.env.NEXT_PUBLIC_API_URL || 'http://localhost/hoaks-yii'
+      const response = await fetch(`${apiBase}/api/pengaduan/submit`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
