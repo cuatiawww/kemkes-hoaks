@@ -10,6 +10,8 @@ import {
   Globe,
   User,
   Phone,
+  Mail,
+  Share2,
   FileText,
   MessageSquareText,
   AlertCircle
@@ -29,7 +31,9 @@ interface UploadedFile {
 export default function ReportHoaxModal({ isOpen, onClose }: ReportHoaxModalProps) {
   const [isAnonymous, setIsAnonymous] = useState(false)
   const [fullName, setFullName] = useState('')
-  const [contact, setContact] = useState('')
+  const [email, setEmail] = useState('')
+  const [phone, setPhone] = useState('')
+  const [socialMedia, setSocialMedia] = useState('')
   const [narration, setNarration] = useState('')
   const [sourceUrl, setSourceUrl] = useState('')
   const [images, setImages] = useState<UploadedFile[]>([])
@@ -101,7 +105,9 @@ export default function ReportHoaxModal({ isOpen, onClose }: ReportHoaxModalProp
   const handleReset = () => {
     setIsAnonymous(false)
     setFullName('')
-    setContact('')
+    setEmail('')
+    setPhone('')
+    setSocialMedia('')
     setNarration('')
     setSourceUrl('')
     setImages([])
@@ -169,17 +175,47 @@ export default function ReportHoaxModal({ isOpen, onClose }: ReportHoaxModalProp
                 </label>
               </div>
 
-              {/* Field 2: Medsos / Telp Pelapor */}
+              {/* Field 2: Email Pelapor */}
+              <div>
+                <label className="flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-slate-700 mb-2">
+                  <Mail className="h-4 w-4 text-[#07877c]" />
+                  Email Pelapor
+                </label>
+                <input
+                  type="email"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  placeholder="Contoh: nama@email.com"
+                  className="w-full px-4 py-3 rounded-xl border border-slate-200 text-sm font-medium text-slate-800 placeholder:text-slate-400 bg-slate-50/50 focus:bg-white focus:outline-none focus:ring-2 focus:ring-[#07877c] focus:border-transparent transition-all"
+                />
+              </div>
+
+              {/* Field 3: No. Telepon / WhatsApp */}
               <div>
                 <label className="flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-slate-700 mb-2">
                   <Phone className="h-4 w-4 text-[#07877c]" />
-                  Media Sosial / No. Telepon Pelapor
+                  No. Telepon / WhatsApp Pelapor
+                </label>
+                <input
+                  type="tel"
+                  value={phone}
+                  onChange={(e) => setPhone(e.target.value)}
+                  placeholder="Contoh: 081234567890"
+                  className="w-full px-4 py-3 rounded-xl border border-slate-200 text-sm font-medium text-slate-800 placeholder:text-slate-400 bg-slate-50/50 focus:bg-white focus:outline-none focus:ring-2 focus:ring-[#07877c] focus:border-transparent transition-all"
+                />
+              </div>
+
+              {/* Field 4: Media Sosial Pelapor */}
+              <div>
+                <label className="flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-slate-700 mb-2">
+                  <Share2 className="h-4 w-4 text-[#07877c]" />
+                  Media Sosial Pelapor
                 </label>
                 <input
                   type="text"
-                  value={contact}
-                  onChange={(e) => setContact(e.target.value)}
-                  placeholder="Contoh: Akun Facebook, Akun Instagram, No. WhatsApp, dsb."
+                  value={socialMedia}
+                  onChange={(e) => setSocialMedia(e.target.value)}
+                  placeholder="Contoh: Akun Facebook, Instagram, TikTok, dsb."
                   className="w-full px-4 py-3 rounded-xl border border-slate-200 text-sm font-medium text-slate-800 placeholder:text-slate-400 bg-slate-50/50 focus:bg-white focus:outline-none focus:ring-2 focus:ring-[#07877c] focus:border-transparent transition-all"
                 />
               </div>
@@ -299,87 +335,95 @@ export default function ReportHoaxModal({ isOpen, onClose }: ReportHoaxModalProp
               </div>
             </form>
           ) : (
-            /* Success State with PROBIS Stepper Feedback */
-            <div className="py-4 text-center space-y-6">
+            /* Success State with Clear Notification & PROBIS Stepper Feedback */
+            <div className="py-2 text-center space-y-5">
               <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-emerald-100 text-emerald-600 shadow-inner">
                 <CheckCircle2 className="h-10 w-10" />
               </div>
+
               <div>
-                <h3 className="text-xl font-bold text-slate-800">Laporan Berhasil Terkirim!</h3>
-                <p className="text-xs font-semibold text-slate-500 mt-1">
-                  Nomor Referensi Tiket Anda: <span className="font-extrabold text-[#07877c] bg-[#07877c]/10 px-2 py-0.5 rounded">{ticketId}</span>
+                <h3 className="text-xl font-bold text-slate-800">Laporan Anda Sudah Terkirim!</h3>
+                <p className="text-xs font-semibold text-slate-500 mt-1 max-w-md mx-auto leading-relaxed">
+                  Laporan Anda akan kami tinjau dan verifikasi oleh tim ahli kami. Kami akan menginformasikan kembali hasil verifikasi atau penayangan klarifikasi laporan Anda.
                 </p>
               </div>
 
-              {/* PROBIS Stepper Process Breakdown */}
-              <div className="bg-slate-50 border border-slate-200/80 rounded-2xl p-5 text-left">
-                <h4 className="text-xs font-bold uppercase tracking-wider text-slate-500 mb-4">
-                  Tahapan Alur Bisnis (PROBIS):
+              {/* Box Info Nomor Tiket & Bantuan */}
+              <div className="bg-emerald-50/80 border border-emerald-200/80 rounded-2xl p-4 text-center">
+                <p className="text-xs text-emerald-900 font-medium">Nomor Referensi Tiket Anda:</p>
+                <p className="text-lg font-extrabold text-[#07877c] tracking-wider my-1">{ticketId}</p>
+                <p className="text-[11px] text-emerald-800 font-normal leading-normal">
+                  Jika Anda tidak mendapatkan pembaruan informasi verifikasi atau membutuhkan penanganan cepat, silakan hubungi kami dengan menyertakan Nomor Tiket Anda.
+                </p>
+              </div>
+
+              {/* Horizontal Stepper Timeline (User Friendly Public View) */}
+              <div className="bg-slate-50 border border-slate-200/80 rounded-2xl p-5 text-center">
+                <h4 className="text-xs font-bold uppercase tracking-wider text-slate-500 mb-5">
+                  Tahapan Verifikasi Laporan
                 </h4>
-                <div className="space-y-4">
+
+                <div className="relative flex items-center justify-between max-w-md mx-auto px-2">
+                  {/* Connecting Progress Line behind icons */}
+                  <div className="absolute top-4 left-6 right-6 h-0.5 bg-slate-200 -z-0">
+                    <div className="h-full bg-emerald-500 w-[33%]" />
+                  </div>
+
                   {/* Step 1: Terkirim */}
-                  <div className="flex items-start gap-3">
-                    <div className="flex h-7 w-7 flex-shrink-0 items-center justify-center rounded-full bg-emerald-500 text-white font-bold text-xs">
+                  <div className="relative z-10 flex flex-col items-center group">
+                    <div className="flex h-9 w-9 items-center justify-center rounded-full bg-emerald-500 text-white font-extrabold text-xs shadow-sm ring-4 ring-white">
                       ✓
                     </div>
-                    <div>
-                      <p className="text-sm font-bold text-slate-800">1. Terkirim (Selesai)</p>
-                      <p className="text-xs text-slate-500">Laporan Anda telah tercatat ke sistem database pengaduan Kemenkes.</p>
-                    </div>
+                    <span className="text-[11px] sm:text-[12px] font-bold text-slate-800 mt-2">1. Terkirim</span>
+                    <span className="text-[9px] sm:text-[10px] text-emerald-700 font-extrabold bg-emerald-100 px-1.5 py-0.5 rounded mt-0.5">Selesai</span>
                   </div>
 
-                  {/* Step 2: Direview */}
-                  <div className="flex items-start gap-3">
-                    <div className="flex h-7 w-7 flex-shrink-0 items-center justify-center rounded-full bg-amber-500 text-white font-bold text-xs animate-pulse">
+                  {/* Step 2: Peninjauan (Active) */}
+                  <div className="relative z-10 flex flex-col items-center group">
+                    <div className="flex h-9 w-9 items-center justify-center rounded-full bg-amber-500 text-white font-extrabold text-xs shadow-sm ring-4 ring-white animate-pulse">
                       2
                     </div>
-                    <div>
-                      <p className="text-sm font-bold text-slate-800">2. Direview (Proses Berjalan)</p>
-                      <p className="text-xs text-slate-500">Tim Verifikator & Ahli Kesehatan sedang meneliti dan mengecek keaslian informasi.</p>
-                    </div>
+                    <span className="text-[11px] sm:text-[12px] font-bold text-slate-800 mt-2">2. Peninjauan</span>
+                    <span className="text-[9px] sm:text-[10px] text-amber-800 font-extrabold bg-amber-100 px-1.5 py-0.5 rounded mt-0.5">Proses</span>
                   </div>
 
-                  {/* Step 3: Approval */}
-                  <div className="flex items-start gap-3 opacity-60">
-                    <div className="flex h-7 w-7 flex-shrink-0 items-center justify-center rounded-full bg-slate-300 text-slate-700 font-bold text-xs">
+                  {/* Step 3: Persetujuan */}
+                  <div className="relative z-10 flex flex-col items-center opacity-60">
+                    <div className="flex h-9 w-9 items-center justify-center rounded-full bg-slate-200 text-slate-600 font-bold text-xs ring-4 ring-white">
                       3
                     </div>
-                    <div>
-                      <p className="text-sm font-bold text-slate-800">3. Approval</p>
-                      <p className="text-xs text-slate-500">Peninjauan dan persetujuan artikel klarifikasi oleh Redaktur Kemenkes.</p>
-                    </div>
+                    <span className="text-[11px] sm:text-[12px] font-bold text-slate-700 mt-2">3. Persetujuan</span>
+                    <span className="text-[9px] sm:text-[10px] text-slate-500 font-medium mt-0.5">Menunggu</span>
                   </div>
 
                   {/* Step 4: Tayang */}
-                  <div className="flex items-start gap-3 opacity-60">
-                    <div className="flex h-7 w-7 flex-shrink-0 items-center justify-center rounded-full bg-slate-300 text-slate-700 font-bold text-xs">
+                  <div className="relative z-10 flex flex-col items-center opacity-60">
+                    <div className="flex h-9 w-9 items-center justify-center rounded-full bg-slate-200 text-slate-600 font-bold text-xs ring-4 ring-white">
                       4
                     </div>
-                    <div>
-                      <p className="text-sm font-bold text-slate-800">4. Tayang di Portal</p>
-                      <p className="text-xs text-slate-500">Hasil verifikasi dipublikasikan secara terbuka pada portal ini.</p>
-                    </div>
+                    <span className="text-[11px] sm:text-[12px] font-bold text-slate-700 mt-2">4. Publikasi</span>
+                    <span className="text-[9px] sm:text-[10px] text-slate-500 font-medium mt-0.5">Tayang</span>
                   </div>
                 </div>
               </div>
 
-              {/* Hybrid WA Option */}
-              <div className="pt-2">
+              {/* Hybrid WA Direct Chat with pre-filled Ticket ID */}
+              <div className="pt-1">
                 <a
-                  href="https://wa.me/628111222333"
+                  href={`https://wa.me/628111222333?text=${encodeURIComponent(`Halo Admin Kemenkes, saya ingin menanyakan perkembangan laporan hoaks dengan Nomor Tiket: ${ticketId}`)}`}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="inline-flex items-center justify-center gap-2 text-xs font-bold text-[#07877c] hover:underline"
+                  className="inline-flex items-center justify-center gap-2 text-xs font-bold text-[#07877c] hover:underline bg-[#07877c]/10 hover:bg-[#07877c]/20 px-4 py-2.5 rounded-xl transition-all w-full"
                 >
                   <MessageSquareText className="h-4 w-4" />
-                  <span>Butuh respons lebih cepat? Chat WhatsApp Official Kami</span>
+                  <span>Tanyakan Status via WhatsApp (No. Tiket: {ticketId})</span>
                 </a>
               </div>
 
-              <div className="pt-4 border-t border-slate-100">
+              <div className="pt-3 border-t border-slate-100">
                 <button
                   onClick={handleReset}
-                  className="w-full py-3 rounded-xl bg-[#07877c] hover:bg-[#056058] text-white font-bold text-sm shadow-md transition-all"
+                  className="w-full py-3 rounded-xl bg-[#07877c] hover:bg-[#056058] text-white font-bold text-sm shadow-sm transition-all cursor-pointer"
                 >
                   Selesai & Tutup
                 </button>

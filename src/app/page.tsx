@@ -37,11 +37,10 @@ import ReportHoaxModal from '@/components/ReportHoaxModal'
 function ArticleImage({ src, statusHoaks = true, compact = false }: { src: string; statusHoaks?: boolean; compact?: boolean }) {
   return (
     <div
-      className={`relative overflow-hidden bg-cover bg-center bg-gradient-to-br from-slate-100 to-slate-200 ${
-        compact
-          ? 'h-40 sm:h-full w-full rounded-t-2xl sm:rounded-l-2xl sm:rounded-tr-none'
-          : 'max-w-[600px] aspect-[2/1] w-full mx-auto rounded-t-2xl sm:rounded-2xl'
-      }`}
+      className={`relative overflow-hidden bg-cover bg-center bg-gradient-to-br from-slate-100 to-slate-200 ${compact
+        ? 'h-40 sm:h-full w-full rounded-t-2xl sm:rounded-l-2xl sm:rounded-tr-none'
+        : 'max-w-[600px] aspect-[2/1] w-full mx-auto rounded-t-2xl sm:rounded-2xl'
+        }`}
       style={{ backgroundImage: `url("${encodeURI(src)}")` }}
       role="img"
       aria-label="Ilustrasi artikel hoaks kesehatan"
@@ -51,9 +50,8 @@ function ArticleImage({ src, statusHoaks = true, compact = false }: { src: strin
         <img
           src={statusHoaks ? "/watermark.png" : "/watermark2.png"}
           alt="Status Watermark"
-          className={`object-contain opacity-95 select-none -rotate-12 transition-transform duration-300 ${
-            compact ? 'w-[130px] sm:w-[150px]' : 'w-[260px] sm:w-[320px]'
-          }`}
+          className={`object-contain opacity-95 select-none -rotate-12 transition-transform duration-300 ${compact ? 'w-[130px] sm:w-[150px]' : 'w-[260px] sm:w-[320px]'
+            }`}
         />
       </div>
     </div>
@@ -122,9 +120,8 @@ function LatestHoaxSlider({ items }: { items: ArtikelHoaksItem[] }) {
           <button
             key={idx}
             onClick={() => setCurrentIndex(idx)}
-            className={`h-2.5 rounded-full transition-all duration-300 ${
-              currentIndex === idx ? 'w-6 bg-[#07877c]' : 'w-2.5 bg-slate-300'
-            }`}
+            className={`h-2.5 rounded-full transition-all duration-300 ${currentIndex === idx ? 'w-6 bg-[#07877c]' : 'w-2.5 bg-slate-300'
+              }`}
             aria-label={`Go to slide ${idx + 1}`}
           />
         ))}
@@ -339,12 +336,12 @@ export default function HomePage({ searchParams }: HomePageProps) {
               scrollbar-width: none;
             }
           `}</style>
-          
+
           {/* Label */}
           <div className="absolute left-0 top-0 bottom-0 bg-[#07877c] px-5 flex items-center text-xs font-black uppercase text-white z-20 whitespace-nowrap rounded-l-lg">
             Informasi Terkini
           </div>
-          
+
           {/* Marquee Track */}
           <div className="animate-marquee-scroll whitespace-nowrap pl-[160px] text-xs font-bold text-slate-600 flex items-center h-full">
             <span className="inline-block mx-4">• Portal Resmi Terpadu Rumah Sakit Kemenkes RI: Akses Layanan Kesehatan Terpusat</span>
@@ -378,6 +375,29 @@ export default function HomePage({ searchParams }: HomePageProps) {
           setSearchQuery={setSearchQuery}
           totalCount={totalHoaxes}
         />
+      </div>
+
+      {/* Banner CTA Lapor Hoaks Memanjang (Tepat di bawah Hero Section) */}
+      <div className="mx-auto max-w-[1160px] px-4 mt-6">
+        <div className="bg-[#07877c] rounded-2xl p-6 sm:p-8 text-white shadow-sm border border-[#056058] flex flex-col md:flex-row items-center justify-between gap-6">
+          <div className="flex-1 min-w-0">
+            <h3 className="text-xl sm:text-2xl font-bold tracking-tight">
+              Periksa Keaslian Informasi
+            </h3>
+            <p className="mt-2 text-sm text-white/90 font-medium leading-relaxed max-w-2xl">
+              Hubungi kami jika Anda masih memiliki keraguan dalam berita yang bertebaran untuk dicek kevalidan hoaksnya oleh tim ahli kami.
+            </p>
+          </div>
+          <div className="flex-shrink-0 w-full md:w-auto">
+            <button
+              type="button"
+              onClick={() => setIsReportModalOpen(true)}
+              className="w-full md:w-auto px-8 py-3.5 bg-[#d6ef21] hover:bg-[#c8e219] text-[#07877c] font-extrabold text-sm sm:text-base rounded-xl transition-all duration-200 shadow-sm hover:scale-[1.02] cursor-pointer flex items-center justify-center gap-2 whitespace-nowrap"
+            >
+              <span>Laporkan Isu / Cek Fakta</span>
+            </button>
+          </div>
+        </div>
       </div>
 
       <section className="mx-auto max-w-[1160px] px-4 pb-28 pt-12">
@@ -414,23 +434,21 @@ export default function HomePage({ searchParams }: HomePageProps) {
                     onClick={() => toggleCategory(category.label, category.count)}
                     className={`flex-shrink-0 flex items-center gap-3 rounded-full border px-4 py-2 text-xs font-bold transition-all
                       lg:w-full lg:flex lg:items-center lg:justify-between lg:border-0 lg:border-b lg:border-[#d9d9d9] lg:py-5 lg:rounded-none lg:px-0 lg:bg-transparent lg:shadow-none
-                      ${
-                        hasResults
-                          ? isSelected
-                            ? 'bg-[#07877c] text-white border-[#07877c] lg:text-[#07877c] lg:bg-transparent lg:border-transparent'
-                            : 'bg-white text-slate-700 border-slate-200 hover:border-[#07877c] hover:text-[#07877c] lg:border-transparent lg:hover:border-transparent'
-                          : 'bg-slate-50 text-slate-400 border-slate-100 cursor-not-allowed opacity-50 lg:border-transparent'
+                      ${hasResults
+                        ? isSelected
+                          ? 'bg-[#07877c] text-white border-[#07877c] lg:text-[#07877c] lg:bg-transparent lg:border-transparent'
+                          : 'bg-white text-slate-700 border-slate-200 hover:border-[#07877c] hover:text-[#07877c] lg:border-transparent lg:hover:border-transparent'
+                        : 'bg-slate-50 text-slate-400 border-slate-100 cursor-not-allowed opacity-50 lg:border-transparent'
                       }
                     `}
                   >
                     <span className="flex items-center gap-2 lg:gap-5">
-                      <span className={`flex h-7 w-7 lg:h-8 lg:w-8 items-center justify-center rounded-full lg:rounded-md transition ${
-                        hasResults
-                          ? isSelected
-                            ? 'bg-white text-[#07877c] lg:bg-[#07877c] lg:text-white'
-                            : 'bg-[#07877c]/15 text-[#07877c]'
-                          : 'bg-slate-100 text-slate-400'
-                      }`}>
+                      <span className={`flex h-7 w-7 lg:h-8 lg:w-8 items-center justify-center rounded-full lg:rounded-md transition ${hasResults
+                        ? isSelected
+                          ? 'bg-white text-[#07877c] lg:bg-[#07877c] lg:text-white'
+                          : 'bg-[#07877c]/15 text-[#07877c]'
+                        : 'bg-slate-100 text-slate-400'
+                        }`}>
                         <category.icon className="h-4 w-4 lg:h-5 lg:w-5" />
                       </span>
                       <span className={`text-xs lg:text-base font-semibold ${isSelected ? 'font-extrabold text-white lg:text-[#07877c]' : 'text-slate-700'}`}>
@@ -438,22 +456,20 @@ export default function HomePage({ searchParams }: HomePageProps) {
                       </span>
                     </span>
                     <span className="flex items-center gap-2">
-                      <span className={`text-xs lg:text-base font-extrabold ${
-                        hasResults 
-                          ? isSelected
-                            ? 'text-white/90 lg:text-[#07877c]'
-                            : 'text-[#07877c]' 
-                          : 'text-slate-400'
-                      }`}>
+                      <span className={`text-xs lg:text-base font-extrabold ${hasResults
+                        ? isSelected
+                          ? 'text-white/90 lg:text-[#07877c]'
+                          : 'text-[#07877c]'
+                        : 'text-slate-400'
+                        }`}>
                         ({category.count})
                       </span>
-                      <span className={`hidden lg:flex h-5 w-5 items-center justify-center rounded-lg transition-all duration-300 text-white ${
-                        hasResults
-                          ? isSelected
-                            ? 'bg-[#07877c] rotate-90'
-                            : 'bg-[#07877c]/20 text-[#07877c] rotate-0'
-                          : 'bg-slate-200 text-slate-400'
-                      }`}>
+                      <span className={`hidden lg:flex h-5 w-5 items-center justify-center rounded-lg transition-all duration-300 text-white ${hasResults
+                        ? isSelected
+                          ? 'bg-[#07877c] rotate-90'
+                          : 'bg-[#07877c]/20 text-[#07877c] rotate-0'
+                        : 'bg-slate-200 text-slate-400'
+                        }`}>
                         <ChevronRight className="h-3.5 w-3.5" />
                       </span>
                     </span>
@@ -464,7 +480,7 @@ export default function HomePage({ searchParams }: HomePageProps) {
           </aside>
 
           <div className="flex flex-col justify-between min-w-0">
-            <div 
+            <div
               className="space-y-8 lg:max-h-[680px] lg:overflow-y-auto lg:pr-4"
               style={{
                 scrollbarWidth: 'thin',
@@ -522,11 +538,10 @@ export default function HomePage({ searchParams }: HomePageProps) {
                     <button
                       key={pageNum}
                       onClick={() => setCurrentPage(pageNum)}
-                      className={`h-10 w-10 rounded-full font-bold text-sm flex items-center justify-center transition-all ${
-                        isActive
-                          ? 'bg-[#07877c] text-white shadow-md font-extrabold scale-105'
-                          : 'bg-[#07877c]/10 text-[#07877c] hover:bg-[#07877c]/20'
-                      }`}
+                      className={`h-10 w-10 rounded-full font-bold text-sm flex items-center justify-center transition-all ${isActive
+                        ? 'bg-[#07877c] text-white shadow-md font-extrabold scale-105'
+                        : 'bg-[#07877c]/10 text-[#07877c] hover:bg-[#07877c]/20'
+                        }`}
                     >
                       {pageNum}
                     </button>

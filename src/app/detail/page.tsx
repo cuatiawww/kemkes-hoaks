@@ -113,8 +113,8 @@ function HoaxImage({ src, statusHoaks = true, small = false }: { src: string; st
   return (
     <div
       className={`relative overflow-hidden bg-center bg-gradient-to-br from-slate-100 to-slate-200 ${small
-          ? 'w-[100px] h-[64px] sm:w-[130px] sm:h-[84px] bg-cover rounded-xl flex-shrink-0 shadow-sm border border-slate-200/50'
-          : 'max-w-[600px] aspect-[2/1] w-full mx-auto bg-cover rounded-2xl shadow-sm border border-slate-200/50'
+        ? 'w-[100px] h-[64px] sm:w-[130px] sm:h-[84px] bg-cover rounded-xl flex-shrink-0 shadow-sm border border-slate-200/50'
+        : 'max-w-[600px] aspect-[2/1] w-full mx-auto bg-cover rounded-2xl shadow-sm border border-slate-200/50'
         }`}
       style={{ backgroundImage: `url("${encodeURI(src)}")` }}
       role="img"
@@ -410,7 +410,7 @@ export default function DetailPage({ searchParams }: DetailPageProps) {
             <div className="absolute -left-6 -top-6 w-20 h-20 bg-white/5 rounded-full blur-lg pointer-events-none" />
 
             <div className="relative z-10">
-              <h3 className="text-lg font-bold mb-3 leading-snug">Ragu Dengan Keaslian Informasi?</h3>
+              <h3 className="text-lg font-bold mb-3 leading-snug">Periksa Keaslian Informasi</h3>
               <p className="text-xs font-semibold leading-relaxed text-white/90 mb-6">
                 Hubungi kami jika Anda masih memiliki keraguan dalam berita yang bertebaran untuk dicek kevalidan hoaksnya oleh tim ahli kami.
               </p>
