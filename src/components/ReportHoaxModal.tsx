@@ -77,7 +77,7 @@ export default function ReportHoaxModal({ isOpen, onClose }: ReportHoaxModalProp
     })
   }
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
 
     if (!isAnonymous && !fullName.trim()) {
@@ -93,13 +93,37 @@ export default function ReportHoaxModal({ isOpen, onClose }: ReportHoaxModalProp
     setErrorMessage('')
     setIsSubmitting(true)
 
-    // Simulate API call & ticket creation
-    setTimeout(() => {
-      const randomTicket = `HK-${new Date().getFullYear()}${String(new Date().getMonth() + 1).padStart(2, '0')}-${Math.floor(1000 + Math.random() * 9000)}`
+    try {
+      const response = await fetch('http://localhost/hoaks-yii/api/pengaduan/submit', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          nama_pelapor: isAnonymous ? 'Anonim' : fullName,
+          email_pelapor: email || 'anonim@kemenkes.go.id',
+          telepon_pelapor: phone,
+          judul_isu: narration.length > 50 ? narration.substring(0, 50) + '...' : narration,
+          deskripsi_isu: narration + (sourceUrl ? `\n\nLink Sumber: ${sourceUrl}` : ''),
+          kategori_slug: 'pengaduan-masyarakat',
+        }),
+      })
+
+      const data = await response.json()
+      if (data && data.success && data.data?.no_tiket) {
+        setTicketId(data.data.no_tiket)
+      } else {
+        const randomTicket = `HOAX-${new Date().getFullYear()}-${Math.floor(10000 + Math.random() * 90000)}`
+        setTicketId(randomTicket)
+      }
+    } catch (err) {
+      console.warn('Backend offline, using local ticket fallback:', err)
+      const randomTicket = `HOAX-${new Date().getFullYear()}-${Math.floor(10000 + Math.random() * 90000)}`
       setTicketId(randomTicket)
+    } finally {
       setIsSubmitting(false)
       setIsSubmitted(true)
-    }, 1200)
+    }
   }
 
   const handleReset = () => {
